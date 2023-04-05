@@ -1,0 +1,47 @@
+#include <iostream>
+#include <SFML/Graphics.hpp>
+#include <unistd.h>
+#include <SFML/System/Sleep.hpp>
+//#include <Mouse.hpp>
+
+int main()
+{
+    sf::RenderWindow window(sf::VideoMode(1200, 800), "SFML works!");
+    sf::CircleShape shape(400.f);
+    shape.setFillColor(sf::Color::Green);
+    //sf::CircleShape circle_click(10.f);
+    
+    sf::RectangleShape quadro;
+    quadro.setSize({40.f, 40.f});
+    quadro.setFillColor(sf::Color::Red);
+
+    while (window.isOpen())
+    {
+        sf::sleep(sf::milliseconds(300));
+        sf::Event event;
+        //quadro.setPosition({1.f, 1.f});
+        
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::MouseButtonPressed)
+            {
+                //quadro.setFillColor(sf::Color::Blue);
+                
+                //circle_click.setFillColor(sf::Color::Blue);
+                //quadro.setPosition(sf::Vector2f(sf::Mouse::getPosition().x - window.getPosition().x - 10, sf::Mouse::getPosition().y - window.getPosition().y - 23));
+                quadro.setPosition(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
+                //window.draw(circle_click);
+                //window.close();
+            }
+            if (event.type == sf::Event::Closed)
+                window.close();
+        }
+
+        //window.clear();
+        //window.draw(shape);
+        window.draw(quadro);
+        window.display();
+    }
+
+    return 0;
+}
