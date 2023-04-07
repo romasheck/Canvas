@@ -8,93 +8,105 @@
 
 namespace gui
 {
-    class BoundingBox
+//==========================================================================
+    class WidBox
     {
     private:
-        sf::Vector2f location;
-        sf::Vector2f size;
+        sf::Vector2f location_;
+        sf::Vector2f size_;
+        //friend class Widget;
 
     public:
-        
+        void setSize(const sf::Vector2f size) {size_ = size;}
+        sf::Vector2f getSize () const {return size_;}
+
+        void setLocation(const sf::Vector2f location) {location_ = location;}
+        sf::Vector2f getLocation () const {return location_;}
+
+        bool clickMe (sf::Vector2f click_position)
+        {
+            if (click_position.x > location_.x && \
+                click_position.x < (location_.x + size_.x) &&\
+                click_position.y > location_.y && \
+                click_position.y < (location_.y + size_.y))
+            {
+                return true;
+            }
+            return false;
+        }     
     };
-
-    class Widget // : public GrShape
+//==========================================================================
+    class Widget : virtual public WidBox
     {
-    private:
-        Widget* const canvas_ptr;
-        const int type;
+    protected:
+        Widget const * parent_;
 
     public:
-        Widget(Widget* const canvas_ptr_, const int type_):
-        canvas_ptr(canvas_ptr_), type(type_)
-        {};
+        Widget(Widget* parent, sf::Vector2f size = {10.f, 10.f}, sf::Vector2f location = {0.f, 0.f}):
+        parent_(parent)
+        {
+            setSize(size);
+            setLocation(location);
+        }
+        //ban simple CopyCtor
+        Widget(const Widget& widget) = delete;
+        /*
+        Widget(const Widget& widget, Widget const * parent): 
+        parent_(parent)
+        {
+            setSize(widget.getSize());
+            setLocation(widget.getLocation());
+        }
+        */
     
     public:
-        struct HandlerInfo
+        virtual bool catchEvent(const sf::Event event)
         {
-            bool catched = false;
-            bool forParent = false;
-            int signal = DEFAULT;
-        };
-        virtual HandlerInfo catchEvent(const sf::Event event) = 0;
-    
-    public:
-        const int type() const {return type;}
-        enum TYPES
-        {
-            SLAVE,
-            MASTER,
-        };
+            return false;
+        }
     };
-
-    class WidgetManager: public Widget
+//==========================================================================
+    class WidgetManager: virtual public Widget
     {
-    private:
+    protected:
         std::vector<Widget*> widgets;
 
-    private:
-        virtual void reqeustToSignal(int signal);
-        enum SIGNALS
-        {
-            DEFAULT = 0,
-        };
+    public:
+        WidgetManager(Widget* parent, sf::Vector2f size = {10.f, 10.f}, sf::Vector2f location = {0.f, 0.f}):
+        Widget(parent, size, location)
+        {};
 
     public:
-
-    
-    public:
-        HandlerInfo catchEvent(const sf::Event event)
+        bool catchEvent(const sf::Event event)
         {
-            HandlerInfo input_info;
-            HandlerInfo output_info;
-
+            bool catched = false;
             for (const auto& widget_ptr : widgets)
             {
-                input_info = widget_ptr->catchEvent(event);
-                if (input_info.catched = false)
+                catched = widget_ptr->catchEvent(event);
+                if (catched == false)
                 {
                     continue;
                 }
                 else
                 {
-                    output_info.catched = true;
-                    if (widget_ptr->type() == SLAVE)
-                    {
-                        if (input_info.forParent = false)
-                        {
-                            break;
-                        }
-                        else{
-                            reqeustToSignal(input_info.signal); 
-                        }
-                    }
-                    
+                    break;
                 }
             }
 
-            return output_info;
+            return catched;
+        }
+
+    public:
+        void pushWidget(sf::Vector2f size = {10.f, 10.f}, sf::Vector2f location = {0.f, 0.f})
+        {
+            widgets.push_back(new Widget(this, size, location));
+        }
+        void popWidget()
+        {
+            widgets.pop_back();
         }
     };
+//==========================================================================
 }
 
 #endif
