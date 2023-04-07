@@ -3,6 +3,7 @@
 
 #include "gui_lib.hpp"
 #include "CanvasWidget.hpp"
+#include "CanvasMaster.hpp"
 
 namespace gui
 {

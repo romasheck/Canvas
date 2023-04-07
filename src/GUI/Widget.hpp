@@ -5,8 +5,11 @@
 #include "Pixel.hpp"
 //#include "GrShapes.hpp"
 #include <iostream>
+#include <memory.h>
 
-//TODO write class Clickable: public Widget
+
+//TODO WidgetManager need method CreateWidget
+//TODO all Widgets can be drowen, it should contain virtual method draw() 
 //TODO specialize event: MoseEvent, Other
 namespace gui
 {
@@ -41,7 +44,8 @@ namespace gui
     class Widget : virtual public WidBox
     {
     protected:
-        Widget const * parent_;
+        Widget * parent_;
+        //auto& parent() {return parent_;}
 
     public:
         Widget(Widget* parent, sf::Vector2f size = {10.f, 10.f}, sf::Vector2f location = {0.f, 0.f}):
@@ -66,11 +70,24 @@ namespace gui
         {
             return false;
         }
+
+    public:
+        virtual void draw()
+        {
+            sf::RectangleShape bad_view_;
+            bad_view_.setSize(getSize());
+            bad_view_.setPosition(getLocation());
+            bad_view_.setFillColor(sf::Color::Blue);
+            window_ptr->draw(bad_view_);
+        }
+
+    //friend WidgetManager;
     };
 //==========================================================================
     class WidgetManager: virtual public Widget
     {
     protected:
+        //std::vector<std::unique_ptr<Widget>> widgets;
         std::vector<Widget*> widgets;
 
     public:
@@ -99,9 +116,10 @@ namespace gui
         }
 
     public:
-        void pushWidget(sf::Vector2f size = {10.f, 10.f}, sf::Vector2f location = {0.f, 0.f})
+        //void pushWidget(std::unique_ptr<Widget> new_widget_ptr)
+        void pushWidget(Widget* widget_ptr)
         {
-            widgets.push_back(new Widget(this, size, location));
+            widgets.push_back(widget_ptr);
         }
         void popWidget()
         {
@@ -109,11 +127,14 @@ namespace gui
         }
     };
 //==========================================================================
-    class WidgetMaster final : WidgetManager
+    class WidgetMaster: virtual public WidgetManager
     {
     public:
-        ():
-    }
+        WidgetMaster(sf::Vector2f size):
+        WidgetManager(nullptr, size, {0, 0}),
+        Widget(nullptr, size, {0, 0})
+        {};
+    };
 }
 
 #endif

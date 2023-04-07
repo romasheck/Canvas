@@ -11,7 +11,8 @@ namespace gui
             sf::Vector2f clickPosition_;
 
         protected:
-            virtual void respond2Click(const sf::Vector2f clickPosition);
+            virtual void respond2Click(const sf::Vector2f clickPosition)
+            {};
             virtual bool clickMe(const sf::Vector2f clickPosition)
             {
                 return inMe(clickPosition);
