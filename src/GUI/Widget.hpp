@@ -6,6 +6,8 @@
 //#include "GrShapes.hpp"
 #include <iostream>
 
+//TODO write class Clickable: public Widget
+//TODO specialize event: MoseEvent, Other
 namespace gui
 {
 //==========================================================================
@@ -23,12 +25,12 @@ namespace gui
         void setLocation(const sf::Vector2f location) {location_ = location;}
         sf::Vector2f getLocation () const {return location_;}
 
-        bool clickMe (sf::Vector2f click_position)
+        bool inMe (const sf::Vector2f position)
         {
-            if (click_position.x > location_.x && \
-                click_position.x < (location_.x + size_.x) &&\
-                click_position.y > location_.y && \
-                click_position.y < (location_.y + size_.y))
+            if (position.x > location_.x && \
+                position.x < (location_.x + size_.x) &&\
+                position.y > location_.y && \
+                position.y < (location_.y + size_.y))
             {
                 return true;
             }
@@ -107,6 +109,11 @@ namespace gui
         }
     };
 //==========================================================================
+    class WidgetMaster final : WidgetManager
+    {
+    public:
+        ():
+    }
 }
 
 #endif

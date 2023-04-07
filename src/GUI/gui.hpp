@@ -2,6 +2,7 @@
 #define GUI_HPP
 
 #include "gui_lib.hpp"
+#include "CanvasWidget.hpp"
 
 namespace gui
 {
