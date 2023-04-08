@@ -11,11 +11,12 @@ namespace gui
             sf::Vector2f clickPosition_;
 
         protected:
-            virtual void respond2Click(const sf::Vector2f clickPosition)
+            virtual void respond2Click()
             {};
-            virtual bool clickMe(const sf::Vector2f clickPosition)
+            virtual bool clickMe()
             {
-                return inMe(clickPosition);
+                //std::cout<<"in function clickMe"<<std::endl;
+                return inMe(clickPosition_);
             }
             
         public:
@@ -24,14 +25,15 @@ namespace gui
             {};
 
         public:
-            bool catchEvent(const sf::Event event)
+            bool catchEvent(const sf::Event event) override
             {
                 if (event.type == sf::Event::MouseButtonPressed)
                 {
                     clickPosition_ = sf::Vector2f(event.mouseButton.x, event.mouseButton.y);
-                    if (clickMe(clickPosition_) == true)
+                    if (clickMe() == true)
                     {
-                        respond2Click(clickPosition_);
+                        respond2Click();
+                        return true;
                     }
                 }
                 return false;

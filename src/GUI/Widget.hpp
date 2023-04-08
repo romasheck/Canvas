@@ -35,6 +35,7 @@ namespace gui
                 position.y > location_.y && \
                 position.y < (location_.y + size_.y))
             {
+                std::cout<<"inMe: click was my"<<std::endl;
                 return true;
             }
             return false;
@@ -96,7 +97,7 @@ namespace gui
         {};
 
     public:
-        bool catchEvent(const sf::Event event)
+        bool catchEvent(const sf::Event event) override
         {
             bool catched = false;
             for (const auto& widget_ptr : widgets)

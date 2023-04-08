@@ -21,12 +21,14 @@ namespace gui
     public:
         Canvas(Widget* parent, sf::Vector2f size, sf::Vector2f location):
         Clickable(parent, size, location),
-        Widget(parent, size, location)
+        Widget(parent, size, location),
+        currentColor_(sf::Color::Red)
         {
             area_.setFillColor(sf::Color::White);
             area_.setSize(getSize());
             area_.setPosition(getLocation());
             currentStain_.setFillColor(sf::Color::Red);
+            currentStain_.setRadius(30);
         }
 
     public:
@@ -36,16 +38,18 @@ namespace gui
         }
 
     private:
-        void respond2Click(const sf::Vector2f clickPosition)
+        void respond2Click() override
         {
+            std::cout<<"begin responding to click"<<std::endl;
             currentStain_.setFillColor(currentColor_);
-            currentStain_.setPosition(clickPosition);
+            currentStain_.setPosition(clickPosition_);
             // stains.push_back(new sf::CircleShape());
             window_ptr->draw(currentStain_);
+            std::cout<<"stain must be on the"<<" "<<clickPosition_.x<<" "<<clickPosition_.y<<std::endl;
         }
 
     public:
-        void drow()
+        void draw() override
         {
             window_ptr->draw(area_);
         }

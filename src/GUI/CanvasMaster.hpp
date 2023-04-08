@@ -29,8 +29,8 @@ namespace gui
         {
             createCanvas({getSize().x-400, getSize().y - 200},\
                         {100, 100});
-            //createColorRegulator (sf::Color::Green, {250, 100}, {800, 100});
-            //createColorRegulator (sf::Color::Red, {250, 100}, {800, 150});
+            createColorRegulator (sf::Color::Green, {250, 100}, {900, 100});
+            createColorRegulator (sf::Color::Red, {250, 100}, {900, 350});
         }
 
         void drawAll()
@@ -45,21 +45,35 @@ namespace gui
         {
             while (window_ptr->isOpen())
             {
-                drawAll();
+                
+                //drawAll();
+                
                 sf::Event event;
                 while (window_ptr->pollEvent(event))
                 {
-                    if (canvas_ptr_->catchEvent(event))
+                    if (canvas_ptr_->catchEvent(event) == true)
                     {
+                        //std::cout<<"someone catch event"<<std::endl;
                         continue;
                     }
-                    if (event.type == sf::Event::Closed)
+                    else
                     {
-                        window_ptr->close();
+                        for (auto widget: widgets)
+                        {
+                            if (widget->catchEvent(event))
+                            {
+                                continue;
+                            }
+                        }
+                        if (event.type == sf::Event::Closed)
+                        {
+                            window_ptr->close();
+                        }
                     }
                 }
 
                 window_ptr->display();
+                sf::sleep(sf::milliseconds(300));
             }
         }
 

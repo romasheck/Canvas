@@ -11,7 +11,7 @@ int main()
     gui::CanvasMaster canvas_master({1200, 800});
 
     canvas_master.createAll();
-    //canvas_master.drawAll();
+    canvas_master.drawAll();
 
     canvas_master.lookupUpdate();
     /*sf::RenderWindow window(sf::VideoMode(1200, 800), "SFML works!");
