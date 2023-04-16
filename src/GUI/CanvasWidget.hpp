@@ -56,7 +56,7 @@ namespace gui
         }
     };
 //==========================================================================
-    class CWidget : virtual public Widget
+    class CWidget : virtual public Widget //Widget which can affect canvas
     {
     protected:
         Canvas& canvas_;

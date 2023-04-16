@@ -5,7 +5,7 @@
 
 namespace gui
 {
-    class Clickable: virtual public Widget
+    class Clickable: virtual public Widget //Widget which must react on click
     {
         protected:
             coordinate clickLocation_;
@@ -15,7 +15,6 @@ namespace gui
             {};
             virtual bool clickMe()
             {
-                //std::cout<<"in function clickMe"<<std::endl;
                 return inMe(clickLocation_);
             }
             
@@ -41,6 +40,7 @@ namespace gui
             bool catchClick (Click click) override
             {
                 clickLocation_ = click.location_;
+
                 if (clickMe() == true)
                 {
                     respond2Click();
