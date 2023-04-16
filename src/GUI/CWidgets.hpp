@@ -13,15 +13,15 @@ namespace gui
             sf::RectangleShape view_;
         
         public:
-            ColorRegulator(const sf::Color choisenColor, Canvas& canvas_ptr, Widget* parent, sf::Vector2f size = {10.f, 10.f}, sf::Vector2f location = {0.f, 0.f}):
+            ColorRegulator(const sf::Color choisenColor, Canvas& canvas_ptr, Widget* parent, coordinate size = {0.3, 0.3}, coordinate location = {0.f, 0.f}):
             Widget(parent, size, location),
             Clickable(parent, size, location),
             CWidget(canvas_ptr, parent, size, location),
             choisenColor_(choisenColor)
             {
                 view_.setFillColor(choisenColor_);
-                view_.setPosition(getLocation());
-                view_.setSize(getSize());
+                view_.setPosition(locationToPosition(location_));
+                view_.setSize(sizeInPixels());
             }
 
         public: 

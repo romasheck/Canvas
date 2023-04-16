@@ -8,7 +8,7 @@ namespace gui
     class Clickable: virtual public Widget
     {
         protected:
-            sf::Vector2f clickPosition_;
+            coordinate clickLocation_;
 
         protected:
             virtual void respond2Click()
@@ -16,26 +16,37 @@ namespace gui
             virtual bool clickMe()
             {
                 //std::cout<<"in function clickMe"<<std::endl;
-                return inMe(clickPosition_);
+                return inMe(clickLocation_);
             }
             
         public:
-            Clickable(Widget* parent, sf::Vector2f size = {10.f, 10.f}, sf::Vector2f location = {0.f, 0.f}):
+            Clickable(Widget* parent, coordinate size = {0.3, 0.3}, coordinate location = {0.f, 0.f}):
             Widget(parent, size, location)
             {};
 
         public:
             bool catchEvent(const sf::Event event) override
             {
-                if (event.type == sf::Event::MouseButtonPressed)
+                /*if (event.type == sf::Event::MouseButtonPressed)
                 {
-                    clickPosition_ = sf::Vector2f(event.mouseButton.x, event.mouseButton.y);
+                    clickLocation_ = sf::Vector2f(event.mouseButton.x, event.mouseButton.y);
                     if (clickMe() == true)
                     {
                         respond2Click();
                         return true;
                     }
+                }*/
+                return false;
+            }
+            bool catchClick (Click click) override
+            {
+                clickLocation_ = click.location_;
+                if (clickMe() == true)
+                {
+                    respond2Click();
+                    return true;
                 }
+
                 return false;
             }
     };

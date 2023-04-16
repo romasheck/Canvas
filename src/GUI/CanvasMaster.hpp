@@ -17,20 +17,18 @@ namespace gui
 
     public:
         CanvasMaster(sf::Vector2f size):
-        WidgetMaster(size),
-        WidgetManager(nullptr, size, {0, 0}),
-        Widget(nullptr, size, {0, 0})
-        {
-            window_ptr = new sf::RenderWindow(sf::VideoMode(size.x, size.y), "Canvas");
-        }
+        Widget(nullptr, {1, 1}, {0, 0}),
+        WidgetMaster(size, "Canvas")
+        //WidgetManager(nullptr, size, {0, 0}),
+        {};
 
     public:
         void createAll()
-        {
-            createCanvas({getSize().x-400, getSize().y - 200},\
-                        {100, 100});
-            createColorRegulator (sf::Color::Green, {250, 100}, {900, 100});
-            createColorRegulator (sf::Color::Red, {250, 100}, {900, 350});
+        {//{getSize().x-400, getSize().y - 200}
+            createCanvas({0.5, 0.6} ,\
+                        {0.15, 0.1});
+            createColorRegulator (sf::Color::Green, {0.1, 0.1}, canvas_ptr_->location_+canvas_ptr_->size_);
+            createColorRegulator (sf::Color::Red, {0.1, 0.1}, canvas_ptr_->location_ + canvas_ptr_->size_ - coordinate(0, 0.1));
         }
 
         void drawAll()
@@ -38,10 +36,20 @@ namespace gui
             for (const auto& widget_ptr: widgets)
             {
                 widget_ptr->draw();
+                std::cout<<"Master have drown widget with position "<< widget_ptr->locationToPosition(widget_ptr->location_).x_\
+                <<" "<<widget_ptr->locationToPosition(widget_ptr->location_).y_\
+                <<" with size in pixels "<< widget_ptr->sizeInPixels().x_\
+                <<" "<< widget_ptr->sizeInPixels().y_ <<std::endl;
+                std::cout<<"Master have drown widget with location "<< widget_ptr->location_.x_\
+                <<" "<<widget_ptr->location_.y_\
+                <<" with local size "<< widget_ptr->size_.x_\
+                <<" "<< widget_ptr->size_.y_ <<std::endl;
+                //printf("rtAngle is (%f, %f)", widget_ptr->rtAngle().x_, widget_ptr->rtAngle().y_);
+                printf("\n");
             }
         }
 
-        void lookupUpdate()
+        void loop()
         {
             while (window_ptr->isOpen())
             {
@@ -51,7 +59,15 @@ namespace gui
                 sf::Event event;
                 while (window_ptr->pollEvent(event))
                 {
-                    if (canvas_ptr_->catchEvent(event) == true)
+                    if (event.type == sf::Event::Closed)
+                    {
+                        window_ptr->close();
+                    }
+                    else
+                    {
+                        catchEvent(event);
+                    }
+                    /*if (canvas_ptr_->catchEvent(event) == true)
                     {
                         //std::cout<<"someone catch event"<<std::endl;
                         continue;
@@ -69,7 +85,7 @@ namespace gui
                         {
                             window_ptr->close();
                         }
-                    }
+                    }*/
                 }
 
                 window_ptr->display();
@@ -83,13 +99,13 @@ namespace gui
             CANVAS_PLACE = 0,
         };
 
-        void createCanvas(sf::Vector2f canv_size, sf::Vector2f canv_location)
+        void createCanvas(coordinate canv_size, coordinate canv_location)
         {
             canvas_ptr_ = new Canvas(this, canv_size, canv_location);
             pushWidget(canvas_ptr_);
         }
 
-        void createColorRegulator(sf::Color color, sf::Vector2f size, sf::Vector2f location)
+        void createColorRegulator(sf::Color color, coordinate size, coordinate location)
         {
             auto color_reg_ptr = new ColorRegulator(color, *canvas_ptr_, (Widget*)this, size, location);
             pushWidget(std::move(color_reg_ptr));

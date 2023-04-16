@@ -6,14 +6,22 @@
 #include "GUI/gui.hpp"
 //#include <Mouse.hpp>
 
+void foo_test(gui::coordinate a)
+{
+    printf("coord is (%f, %f)\n", a.x_, a.y_);
+}
+
 int main()
 {
-    gui::CanvasMaster canvas_master({1200, 800});
-
+    gui::CanvasMaster canvas_master({1200, 1000});
+    
+    //gui::coordinate a(0.1, 0.1);
+    //foo_test(a);
+    //std::cout<<"0.1 -> Pixels: "<<canvas_master.locationToPosition(a).x_<<std::endl;
     canvas_master.createAll();
     canvas_master.drawAll();
 
-    canvas_master.lookupUpdate();
+    canvas_master.loop();
     /*sf::RenderWindow window(sf::VideoMode(1200, 800), "SFML works!");
     sf::CircleShape shape(400.f);
     shape.setFillColor(sf::Color::Green);

@@ -2,54 +2,68 @@
 #define WIDGET_HPP
 
 #include "gui_lib.hpp"
+#include "coordinate.hpp"
 #include "Pixel.hpp"
+#include "Events.hpp"
 //#include "GrShapes.hpp"
 #include <iostream>
 #include <memory.h>
 
 
-//TODO WidgetManager need method CreateWidget
-//TODO all Widgets can be drowen, it should contain virtual method draw() 
+//TODO WidgetManager need method CreateWidget// realy?
+//TODO all Widgets can be drowen, it should contain virtual method draw() //done, check it 
+
 //TODO specialize event: MoseEvent, Other
+//TODO make local coordinate system for every widget manager (it requers class coordinate?)
 namespace gui
 {
 //==========================================================================
     class WidBox
     {
-    private:
-        sf::Vector2f location_;
-        sf::Vector2f size_;
+    public:
+        coordinate location_;
+        coordinate size_;
         //friend class Widget;
 
     public:
-        void setSize(const sf::Vector2f size) {size_ = size;}
-        sf::Vector2f getSize () const {return size_;}
+        void setSize(const coordinate size) {size_ = size;}
+        coordinate getSize () const {return size_;}
 
-        void setLocation(const sf::Vector2f location) {location_ = location;}
-        sf::Vector2f getLocation () const {return location_;}
+        void setLocation(const coordinate location) {location_ = location;}
+        coordinate getLocation () const {return location_;}
 
-        bool inMe (const sf::Vector2f position)
+        bool inMe (const coordinate position)
         {
-            if (position.x > location_.x && \
-                position.x < (location_.x + size_.x) &&\
-                position.y > location_.y && \
-                position.y < (location_.y + size_.y))
+            if (position.x_ > location_.x_ && \
+                position.x_ < (location_.x_ + size_.x_) &&\
+                position.y_ > location_.y_ && \
+                position.y_ < (location_.y_ + size_.y_))
             {
-                std::cout<<"inMe: click was my"<<std::endl;
+                //std::cout<<"inMe: click was my"<<std::endl;
                 return true;
             }
             return false;
-        }     
+        }
+
+        coordinate rtAngle() const
+        {
+            return location_ + size_;
+        }
+
+        /*coordinate transmitedLocation(coordinate shift, coordinate scale) const
+        {
+            return (shift + ());
+        }*/    
     };
 //==========================================================================
-    class Widget : virtual public WidBox
+    class Widget : public WidBox
     {
     protected:
         Widget * parent_;
         //auto& parent() {return parent_;}
 
     public:
-        Widget(Widget* parent, sf::Vector2f size = {10.f, 10.f}, sf::Vector2f location = {0.f, 0.f}):
+        Widget(Widget* parent, coordinate size = {0.3, 0.3}, coordinate location = {0.f, 0.f}):
         parent_(parent)
         {
             setSize(size);
@@ -66,22 +80,41 @@ namespace gui
         }
         */
     
-    public:
         virtual bool catchEvent(const sf::Event event)
         {
             return false;
         }
-
-    public:
+        virtual bool catchClick (Click click)
+        {
+            return false;
+        }
+    
         virtual void draw()
         {
             sf::RectangleShape bad_view_;
-            bad_view_.setSize(getSize());
-            bad_view_.setPosition(getLocation());
+            bad_view_.setSize(sizeInPixels());
+            bad_view_.setPosition(locationToPosition(location_));
             bad_view_.setFillColor(sf::Color::Blue);
             window_ptr->draw(bad_view_);
         }
 
+        virtual coordinate locationToPosition(coordinate location) const
+        {
+            //std::cout<<"call from W"<<std::endl;
+
+            return parent_->locationToPosition(location);
+        }
+        coordinate sizeInPixels () const
+        {
+            //coordinate result = locationToPosition(rtAngle());
+            //printf ("locRTA is (%f, %f)\n", result.x_, result.y_);
+            return cabs(locationToPosition(rtAngle()) - locationToPosition(location_)); 
+        }
+
+        //virtual coordinate positionToLocation (coordinate position) const
+        //{
+
+        //}
     //friend WidgetManager;
     };
 //==========================================================================
@@ -92,7 +125,7 @@ namespace gui
         std::vector<Widget*> widgets;
 
     public:
-        WidgetManager(Widget* parent, sf::Vector2f size = {10.f, 10.f}, sf::Vector2f location = {0.f, 0.f}):
+        WidgetManager(Widget* parent, coordinate size = {0.3, 0.3}, coordinate location = {0.f, 0.f}):
         Widget(parent, size, location)
         {};
 
@@ -115,6 +148,30 @@ namespace gui
 
             return catched;
         }
+        bool catchClick (Click click) override
+        {
+            bool catched = false;
+
+            if (inMe(click.location_))
+            {
+                click.location_ = positionToLocation(click.location_);
+
+                for (const auto& widget_ptr : widgets)
+                {
+                    catched = widget_ptr->catchClick(click);
+                    if (catched == false)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+
+            return catched;
+        }
 
     public:
         //void pushWidget(std::unique_ptr<Widget> new_widget_ptr)
@@ -126,15 +183,65 @@ namespace gui
         {
             widgets.pop_back();
         }
+
+    public:
+        coordinate locationToPosition(coordinate location) const override
+        {
+            //std::cout<<"call from WM"<<std::endl;
+            location.transmit (location_, size_);
+            
+            return parent_->locationToPosition(location);
+        }
+
+        virtual coordinate positionToLocation(coordinate position) const
+        {
+            return (position - location_)/size_;
+        }
     };
 //==========================================================================
-    class WidgetMaster: virtual public WidgetManager
+    class WidgetMaster: public WidgetManager
     {
+    private:
+        coordinate scale_;
     public:
-        WidgetMaster(sf::Vector2f size):
-        WidgetManager(nullptr, size, {0, 0}),
-        Widget(nullptr, size, {0, 0})
-        {};
+        WidgetMaster(sf::Vector2f size, const char* window_name):
+        WidgetManager(nullptr, {1, 1}, {0, 0}),
+        Widget(nullptr, {1, 1}, {0, 0})
+        {
+            window_ptr = new sf::RenderWindow(sf::VideoMode(size.x, size.y), window_name);
+            scale_ = coordinate((float)window_ptr->getSize().x, (float)window_ptr->getSize().y);
+            printf("scale is (%f, %f)\n", scale_.x_, scale_.y_);
+        };
+
+        coordinate locationToPosition (coordinate location) const override
+        {
+            //std::cout<<"call from WMaster"<<std::endl;
+            location.y_ = 1 - location.y_;
+            //coordinate scale(window_ptr->getSize().x, window_ptr->getSize().y);
+            //std::cout<<"meow"<<std::endl;
+            //printf("scale is (%f, %f)\n", scale_.x_, scale_.y_);
+            location = location*scale_;
+            //printf("location is (%f, %f)\n", location.x_, location.y_);
+            //printf("scale is (%f, %f)\n", scale.x_, scale.y_);
+            return location;
+        }
+
+        coordinate positionToLocation (coordinate position) const override
+        {
+            position = position/scale_;
+            position.y_ = 1 - position.y_;
+
+            return position;
+        }
+
+        bool catchEvent(const sf::Event event) override
+        {
+            if (catchClick(Click(event)))
+            {
+                return true;
+            }
+            return false;
+        }
     };
 }
 

@@ -19,14 +19,14 @@ namespace gui
         sf::CircleShape currentStain_;
 
     public:
-        Canvas(Widget* parent, sf::Vector2f size, sf::Vector2f location):
+        Canvas(Widget* parent, coordinate size, coordinate location):
         Clickable(parent, size, location),
         Widget(parent, size, location),
         currentColor_(sf::Color::Red)
         {
             area_.setFillColor(sf::Color::White);
-            area_.setSize(getSize());
-            area_.setPosition(getLocation());
+            area_.setSize(sizeInPixels());
+            area_.setPosition(locationToPosition(location_));
             currentStain_.setFillColor(sf::Color::Red);
             currentStain_.setRadius(30);
         }
@@ -39,13 +39,14 @@ namespace gui
 
     private:
         void respond2Click() override
-        {
-            std::cout<<"begin responding to click"<<std::endl;
+        {   
+            sf::Vector2f clickPosition = locationToPosition(clickLocation_);
+            //std::cout<<"begin responding to click"<<std::endl;
             currentStain_.setFillColor(currentColor_);
-            currentStain_.setPosition(clickPosition_);
+            currentStain_.setPosition(clickPosition - sf::Vector2f{currentStain_.getRadius(), currentStain_.getRadius()});
             // stains.push_back(new sf::CircleShape());
             window_ptr->draw(currentStain_);
-            std::cout<<"stain must be on the"<<" "<<clickPosition_.x<<" "<<clickPosition_.y<<std::endl;
+            std::cout<<"stain must be on the"<<" "<<clickPosition.x<<" "<<clickPosition.y<<std::endl;
         }
 
     public:
@@ -60,7 +61,7 @@ namespace gui
     protected:
         Canvas& canvas_;
     public:
-        CWidget(Canvas& canvas, Widget* parent, sf::Vector2f size = {10.f, 10.f}, sf::Vector2f location = {0.f, 0.f}):
+        CWidget(Canvas& canvas, Widget* parent, coordinate size = {0.3, 0.3}, coordinate location = {0.f, 0.f}):
         Widget(parent, size, location),
         canvas_(canvas){};
     };
@@ -68,7 +69,7 @@ namespace gui
     class CWidgetManager : public WidgetManager, public CWidget
     {
     public: 
-        CWidgetManager(Canvas& canvas, Widget* parent, sf::Vector2f size = {10.f, 10.f}, sf::Vector2f location = {0.f, 0.f}):
+        CWidgetManager(Canvas& canvas, Widget* parent, coordinate size = {0.3, 0.3}, coordinate location = {0.f, 0.f}):
         Widget(parent, size, location),
         CWidget(canvas, parent, size, location),
         WidgetManager(parent, size, location)
