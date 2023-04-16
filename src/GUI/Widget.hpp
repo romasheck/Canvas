@@ -85,6 +85,8 @@ namespace gui
         //turn local coordinate into abcolute pixels coordinate system FOR CALLING SFML-FUNCTIONS 
         virtual coordinate locationToPosition(coordinate location) const
         {
+            printf ("Widget version with\n");
+            location.printMe("cur loc");
             return parent_->locationToPosition(location);
         }
         //return absolute pixels position of left top angle FOR CALLING SFML-FUNCTIONS
@@ -95,14 +97,31 @@ namespace gui
         //return real size of object in pixels FOR CALLING SFML-FUNCTIONS
         coordinate sizeInPixels () const
         {
-            return cabs(locationToPosition(rtAngle()) - locationToPosition(location_)); 
+            return cabs(Widget::locationToPosition(rtAngle()) - Widget::locationToPosition(location_)); 
+        }
+
+        void dumpMe (const char* name) const
+        {
+            printf("Widget %s\n", name);
+
+            location_.printMe("location");
+            size_.printMe("size");
+
+            rtAngle().printMe("rtAngle loc");
+            ltAngle().printMe("ltAngle loc");
+
+            getPosition().printMe("position");
+            sizeInPixels().printMe("szInPxls");
+            
+            locationToPosition(location_).printMe("lbAngle");
+            locationToPosition(rtAngle()).printMe("rtAngle");   
         }
     };
 //==========================================================================
     class WidgetManager: virtual public Widget //Widget which contain several other, hasn`t parent
     {
     protected:
-        std::vector<Widget*> widgets;
+        std::vector<Widget*> widgets_;
 
     public:
         WidgetManager(Widget* parent, coordinate size = {0.3, 0.3}, coordinate location = {0.f, 0.f}):
@@ -114,7 +133,7 @@ namespace gui
         {
             bool catched = false;
 
-            for (const auto& widget_ptr : widgets)
+            for (const auto& widget_ptr : widgets_)
             {
                 catched = widget_ptr->catchEvent(event);
                 if (catched == false)
@@ -138,7 +157,7 @@ namespace gui
             {
                 click.location_ = positionToLocation(click.location_);
 
-                for (const auto& widget_ptr : widgets)
+                for (const auto& widget_ptr : widgets_)
                 {
                     catched = widget_ptr->catchClick(click);
 
@@ -159,16 +178,19 @@ namespace gui
     public:
         void pushWidget(Widget* widget_ptr)
         {
-            widgets.push_back(widget_ptr);
+            widgets_.push_back(widget_ptr);
         }
         void popWidget()
         {
-            widgets.pop_back();
+            widgets_.pop_back();
         }
 
     public:
         coordinate locationToPosition(coordinate location) const override
         {
+            printf("WManager version with\n");
+            location.printMe("cur loc");
+
             location.transmit (location_, size_);//transmit into parent system
             
             return parent_->locationToPosition(location);
@@ -191,11 +213,13 @@ namespace gui
         {
             window_ptr = new sf::RenderWindow(sf::VideoMode(size.x, size.y), window_name);
             scale_ = coordinate((float)window_ptr->getSize().x, (float)window_ptr->getSize().y);
-            //printf("scale is (%f, %f)\n", scale_.x_, scale_.y_);
         };
 
         coordinate locationToPosition (coordinate location) const override
         {
+            printf("WMAster version with\n");
+            location.printMe("cur loc");
+
             location.y_ = 1 - location.y_;// make y_ upsidedown
 
             location = location*scale_;// multiply coordinate (from 0 to 1) on amount of pixels in side
@@ -230,7 +254,7 @@ namespace gui
 
             click.location_ = positionToLocation(click.location_);
 
-            for (const auto& widget_ptr : widgets)
+            for (const auto& widget_ptr : widgets_)
             {
                 catched = widget_ptr->catchClick(click);
                 if (catched == false)

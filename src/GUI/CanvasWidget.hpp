@@ -46,13 +46,15 @@ namespace gui
             currentStain_.setPosition(clickPosition - sf::Vector2f{currentStain_.getRadius(), currentStain_.getRadius()});
             // stains.push_back(new sf::CircleShape());
             window_ptr->draw(currentStain_);
-            std::cout<<"stain must be on the"<<" "<<clickPosition.x<<" "<<clickPosition.y<<std::endl;
+            //std::cout<<"stain must be on the"<<" "<<clickPosition.x<<" "<<clickPosition.y<<std::endl;
         }
 
     public:
         void draw() override
         {
+            //return;
             window_ptr->draw(area_);
+            //std::cout<<1<<std::endl;
         }
     };
 //==========================================================================

@@ -71,8 +71,8 @@ class coordinate
 
         void printMe(const char* name) const
         {
-            printf("%s",name);
-            printf(": (%f, %f)\n", x_, y_);
+            printf("%15s",name);
+            printf(": (%3.3f, %3.3f)\n", x_, y_);
         }
     };
 
