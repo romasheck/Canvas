@@ -49,6 +49,10 @@ namespace gui
         {
             return location_ + size_;
         }
+        coordinate ltAngle() const
+        {
+            return location_ + coordinate(0, size_.y_);
+        }
 
         /*coordinate transmitedLocation(coordinate shift, coordinate scale) const
         {
@@ -103,6 +107,10 @@ namespace gui
             //std::cout<<"call from W"<<std::endl;
 
             return parent_->locationToPosition(location);
+        }
+        coordinate getPosition() const
+        {
+            return locationToPosition(ltAngle());
         }
         coordinate sizeInPixels () const
         {
@@ -210,7 +218,7 @@ namespace gui
         {
             window_ptr = new sf::RenderWindow(sf::VideoMode(size.x, size.y), window_name);
             scale_ = coordinate((float)window_ptr->getSize().x, (float)window_ptr->getSize().y);
-            printf("scale is (%f, %f)\n", scale_.x_, scale_.y_);
+            //printf("scale is (%f, %f)\n", scale_.x_, scale_.y_);
         };
 
         coordinate locationToPosition (coordinate location) const override
@@ -236,11 +244,36 @@ namespace gui
 
         bool catchEvent(const sf::Event event) override
         {
-            if (catchClick(Click(event)))
+            if (event.type == sf::Event::MouseButtonPressed)
             {
-                return true;
+                if (catchClick(Click(event)))
+                {
+                    return true;
+                }
             }
             return false;
+        }
+
+        bool catchClick(Click click) override
+        {
+            bool catched = false;
+
+            click.location_ = positionToLocation(click.location_);
+
+            for (const auto& widget_ptr : widgets)
+            {
+                catched = widget_ptr->catchClick(click);
+                if (catched == false)
+                {
+                    continue;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return catched;
         }
     };
 }

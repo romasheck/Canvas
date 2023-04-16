@@ -24,11 +24,10 @@ namespace gui
 
     public:
         void createAll()
-        {//{getSize().x-400, getSize().y - 200}
-            createCanvas({0.5, 0.6} ,\
-                        {0.15, 0.1});
-            createColorRegulator (sf::Color::Green, {0.1, 0.1}, canvas_ptr_->location_+canvas_ptr_->size_);
-            createColorRegulator (sf::Color::Red, {0.1, 0.1}, canvas_ptr_->location_ + canvas_ptr_->size_ - coordinate(0, 0.1));
+        {
+            createCanvas({0.7, 0.8}, {0.1, 0.1});
+            createColorRegulator (sf::Color::Green, {0.1, 0.1}, canvas_ptr_->location_+canvas_ptr_->size_ - coordinate(0, 0.1));
+            createColorRegulator (sf::Color::Red, {0.1, 0.1}, canvas_ptr_->location_ + canvas_ptr_->size_ - coordinate(0, 0.2));
         }
 
         void drawAll()
@@ -36,16 +35,6 @@ namespace gui
             for (const auto& widget_ptr: widgets)
             {
                 widget_ptr->draw();
-                std::cout<<"Master have drown widget with position "<< widget_ptr->locationToPosition(widget_ptr->location_).x_\
-                <<" "<<widget_ptr->locationToPosition(widget_ptr->location_).y_\
-                <<" with size in pixels "<< widget_ptr->sizeInPixels().x_\
-                <<" "<< widget_ptr->sizeInPixels().y_ <<std::endl;
-                std::cout<<"Master have drown widget with location "<< widget_ptr->location_.x_\
-                <<" "<<widget_ptr->location_.y_\
-                <<" with local size "<< widget_ptr->size_.x_\
-                <<" "<< widget_ptr->size_.y_ <<std::endl;
-                //printf("rtAngle is (%f, %f)", widget_ptr->rtAngle().x_, widget_ptr->rtAngle().y_);
-                printf("\n");
             }
         }
 
@@ -89,7 +78,7 @@ namespace gui
                 }
 
                 window_ptr->display();
-                sf::sleep(sf::milliseconds(300));
+                sf::sleep(sf::milliseconds(500));
             }
         }
 
@@ -99,9 +88,9 @@ namespace gui
             CANVAS_PLACE = 0,
         };
 
-        void createCanvas(coordinate canv_size, coordinate canv_location)
+        void createCanvas(coordinate size, coordinate location)
         {
-            canvas_ptr_ = new Canvas(this, canv_size, canv_location);
+            canvas_ptr_ = new Canvas(this, size, location);
             pushWidget(canvas_ptr_);
         }
 

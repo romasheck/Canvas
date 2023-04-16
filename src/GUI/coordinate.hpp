@@ -68,6 +68,12 @@ class coordinate
         {
             return sf::Vector2f(x_, y_);
         }
+
+        void printMe(const char* name) const
+        {
+            printf("%s",name);
+            printf(": (%f, %f)\n", x_, y_);
+        }
     };
 
     inline coordinate operator - (const coordinate right)//-a

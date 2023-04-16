@@ -26,7 +26,7 @@ namespace gui
         {
             area_.setFillColor(sf::Color::White);
             area_.setSize(sizeInPixels());
-            area_.setPosition(locationToPosition(location_));
+            area_.setPosition(getPosition());
             currentStain_.setFillColor(sf::Color::Red);
             currentStain_.setRadius(30);
         }

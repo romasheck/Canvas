@@ -13,7 +13,7 @@ void foo_test(gui::coordinate a)
 
 int main()
 {
-    gui::CanvasMaster canvas_master({1200, 1000});
+    gui::CanvasMaster canvas_master({1000, 1000});
     
     //gui::coordinate a(0.1, 0.1);
     //foo_test(a);

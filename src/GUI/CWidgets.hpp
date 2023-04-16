@@ -20,7 +20,7 @@ namespace gui
             choisenColor_(choisenColor)
             {
                 view_.setFillColor(choisenColor_);
-                view_.setPosition(locationToPosition(location_));
+                view_.setPosition(getPosition());
                 view_.setSize(sizeInPixels());
             }
 
