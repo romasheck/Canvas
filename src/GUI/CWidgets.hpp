@@ -21,7 +21,7 @@ namespace gui
             {
                 view_.setFillColor(choisenColor_);
                 view_.setPosition(getPosition());
-                view_.setSize(sizeInPixels());
+                view_.setSize(getSizeInPixels());
             }
 
         public: 
@@ -50,10 +50,11 @@ namespace gui
         Widget(parent, size, location)
         {
             background_.setFillColor(sf::Color::Magenta);
-            background_.setSize(sizeInPixels());
+            background_.setSize(getSizeInPixels());
             background_.setPosition(getPosition());
         };
 
+    public:
         void createAll()
         {
             //location = loc_canv + sz_canv - sz_ColorReg.y_
@@ -64,6 +65,7 @@ namespace gui
             {0.1, 0.1} );
         }
 
+    public:
         void draw() override
         {
             window_ptr->draw(background_);

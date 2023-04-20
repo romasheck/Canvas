@@ -25,7 +25,7 @@ namespace gui
         currentColor_(sf::Color::Red)
         {
             area_.setFillColor(sf::Color::White);
-            area_.setSize(sizeInPixels());
+            area_.setSize(getSizeInPixels());
             area_.setPosition(getPosition());
             currentStain_.setFillColor(sf::Color::Red);
             currentStain_.setRadius(30);

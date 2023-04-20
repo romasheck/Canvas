@@ -32,21 +32,13 @@ namespace gui
             createCanvas({0.7, 0.8}, {0.1, 0.1});
             createPanel({0.1, 0.8}, \
                         canvas_ptr_->location_ + canvas_ptr_->size_ - coordinate(0, 0.8));
-            //location = loc_canv + sz_canv - sz_ColorReg.y_
-            //createColorRegulator (sf::Color::Green, {0.1, 0.1}, \
-            {0.5, 0.5});
-            /*//location = loc_canv + sz_canv - 2*sz_ColorReg.y_
-            createColorRegulator (sf::Color::Red, {0.1, 0.1}, \
-            canvas_ptr_->location_ + canvas_ptr_->size_ - coordinate(0, 0.2));
-            */
         }
-        //draw all his Widgets one time
+        //draw all his Widgets in cycle
         void drawAll()
         {
             for (const auto& widget_ptr: widgets_)
             {
                 widget_ptr->draw();
-                //std::cout<<1<<std::endl;
             }
 
             window_ptr->display();
@@ -56,7 +48,6 @@ namespace gui
         {
             while (window_ptr->isOpen())
             {
-                
                 sf::Event event;
                 
                 while (window_ptr->pollEvent(event))
@@ -79,9 +70,6 @@ namespace gui
     private:
         void createCanvas(coordinate size, coordinate location)
         {
-            //printf("Creating canvas with\n");
-            //size.printMe("size");
-            //location.printMe("location");
             canvas_ptr_ = new Canvas(this, size, location);
             pushWidget(canvas_ptr_);
         }
@@ -91,19 +79,13 @@ namespace gui
             pushWidget(panel_ptr);
 
             panel_ptr->createAll();
-
-            //panel_ptr->dumpMe("panel");
-            //panel_ptr->locationToPosition(rtAngle()).printMe("rtAngle");
-
-            //panel_ptr->locationToPosition(panel_ptr->location_).printMe("lbAngle");
-            //(panel_ptr->locationToPosition(rtAngle()) - panel_ptr->locationToPosition(panel_ptr->location_)).printMe("recal sz");
         }
-        
+        /*
         void createColorRegulator(sf::Color color, coordinate size, coordinate location)
         {
             auto color_reg_ptr = new ColorRegulator(color, *canvas_ptr_, (Widget*)this, size, location);
             pushWidget(std::move(color_reg_ptr));
-        }
+        }*/
         
     };
 }

@@ -61,7 +61,10 @@ namespace gui
         }
         //ban simple CopyCtor
         Widget(const Widget& widget) = delete;
-    
+        //virtual Dtor 
+        virtual ~Widget() = default;
+
+    public:
         virtual bool catchEvent(const sf::Event event)
         {
             return false;
@@ -71,22 +74,22 @@ namespace gui
             return false;
         }
     
+    public:
         virtual void draw() //default: draw blue rectangle in W
         {
             sf::RectangleShape bad_view_;
 
-            bad_view_.setSize(sizeInPixels());
+            bad_view_.setSize(getSizeInPixels());
             bad_view_.setPosition(getPosition());
             bad_view_.setFillColor(sf::Color::Blue);
 
             window_ptr->draw(bad_view_);
         }
 
+    public:
         //turn local coordinate into abcolute pixels coordinate system FOR CALLING SFML-FUNCTIONS 
         virtual coordinate locationToPosition(coordinate location) const
         {
-            printf ("Widget version with\n");
-            location.printMe("cur loc");
             return parent_->locationToPosition(location);
         }
         //return absolute pixels position of left top angle FOR CALLING SFML-FUNCTIONS
@@ -95,11 +98,12 @@ namespace gui
             return Widget::locationToPosition(ltAngle());
         }
         //return real size of object in pixels FOR CALLING SFML-FUNCTIONS
-        coordinate sizeInPixels () const
+        coordinate getSizeInPixels () const
         {
             return cabs(Widget::locationToPosition(rtAngle()) - Widget::locationToPosition(location_)); 
         }
 
+    public:
         void dumpMe (const char* name) const
         {
             printf("Widget %s\n", name);
@@ -111,14 +115,14 @@ namespace gui
             ltAngle().printMe("ltAngle loc");
 
             getPosition().printMe("position");
-            sizeInPixels().printMe("szInPxls");
+            getSizeInPixels().printMe("szInPxls");
             
             locationToPosition(location_).printMe("lbAngle");
             locationToPosition(rtAngle()).printMe("rtAngle");   
         }
     };
 //==========================================================================
-    class WidgetManager: virtual public Widget //Widget which contain several other, hasn`t parent
+    class WidgetManager: virtual public Widget //Widget which contain several other
     {
     protected:
         std::vector<Widget*> widgets_;
@@ -127,15 +131,22 @@ namespace gui
         WidgetManager(Widget* parent, coordinate size = {0.3, 0.3}, coordinate location = {0.f, 0.f}):
         Widget(parent, size, location)
         {};
+        ~WidgetManager() override
+        {
+            for (const auto& widget_ptr: widgets_)
+            {
+                delete widget_ptr;
+            }
+        }
 
     public:
         bool catchEvent(const sf::Event event) override // still useless shit
         {
             bool catched = false;
 
-            for (const auto& widget_ptr : widgets_)
+            for (auto it = widgets_.rbegin(); it != widgets_.rend(); ++it)
             {
-                catched = widget_ptr->catchEvent(event);
+                catched = (*it)->catchEvent(event);
                 if (catched == false)
                 {
                     continue;
@@ -157,10 +168,9 @@ namespace gui
             {
                 click.location_ = positionToLocation(click.location_);
 
-                for (const auto& widget_ptr : widgets_)
+                for (auto it = widgets_.rbegin(); it != widgets_.rend(); ++it)
                 {
-                    catched = widget_ptr->catchClick(click);
-
+                    catched = (*it)->catchClick(click);
                     if (catched == false)
                     {
                         continue;
@@ -188,8 +198,6 @@ namespace gui
     public:
         coordinate locationToPosition(coordinate location) const override
         {
-            printf("WManager version with\n");
-            location.printMe("cur loc");
 
             location.transmit (location_, size_);//transmit into parent system
             
@@ -202,7 +210,7 @@ namespace gui
         }
     };
 //==========================================================================
-    class WidgetMaster: public WidgetManager //Base for MainWidget
+    class WidgetMaster: public WidgetManager //Base for MainWidget and HAS NOT parent (nullptr)
     {
     private:
         coordinate scale_;
@@ -217,9 +225,6 @@ namespace gui
 
         coordinate locationToPosition (coordinate location) const override
         {
-            printf("WMAster version with\n");
-            location.printMe("cur loc");
-
             location.y_ = 1 - location.y_;// make y_ upsidedown
 
             location = location*scale_;// multiply coordinate (from 0 to 1) on amount of pixels in side
@@ -254,9 +259,9 @@ namespace gui
 
             click.location_ = positionToLocation(click.location_);
 
-            for (const auto& widget_ptr : widgets_)
+            for (auto it = widgets_.rbegin(); it != widgets_.rend(); ++it)
             {
-                catched = widget_ptr->catchClick(click);
+                catched = (*it)->catchClick(click);
                 if (catched == false)
                 {
                     continue;
