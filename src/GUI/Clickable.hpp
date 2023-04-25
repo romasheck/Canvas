@@ -19,7 +19,7 @@ namespace gui
             }
             
         public:
-            Clickable(Widget* parent, coordinate size = {0.3, 0.3}, coordinate location = {0.f, 0.f}):
+            Clickable(WidgetManager* parent, coordinate size = {0.3, 0.3}, coordinate location = {0.f, 0.f}):
             Widget(parent, size, location)
             {};
 

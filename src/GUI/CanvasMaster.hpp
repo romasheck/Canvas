@@ -40,10 +40,6 @@ namespace gui
             createPanel({0.1, 0.8}, \
                         canvas_ptr_->location_ + canvas_ptr_->size_ - coordinate(0, 0.8));
         }
-        //draw all his Widgets in cycle
-        void drawAll();
-        //cycle catching event
-        void loop();
 
     private:
         void createCanvas(coordinate size, coordinate location);

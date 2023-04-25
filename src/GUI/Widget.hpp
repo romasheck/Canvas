@@ -11,6 +11,9 @@
 
 namespace gui
 {
+    class Widget;
+    class WidgetManager;
+    class WidgetMaster;
 //==========================================================================
     class WidBox //rectangle that has local coord and size in loc coord sys
     {
@@ -25,7 +28,7 @@ namespace gui
         void setLocation(const coordinate location) {location_ = location;}//useless
         coordinate getLocation () const {return location_;}//useless
 
-        bool inMe (const coordinate position);//position in widBox?
+        bool inMe (const coordinate position) const;//position in widBox?
 
         coordinate rtAngle() const;//return right top angle of WidBox
         coordinate ltAngle() const;//return left top angle of WidBox
@@ -34,10 +37,10 @@ namespace gui
     class Widget : public WidBox //WidBox which can be drawn, can catch events (sp. click) and has parent
     {
     protected:
-        Widget * parent_;
+        WidgetManager * parent_;
 
     public:
-        Widget(Widget* parent, coordinate size = {0.3, 0.3}, coordinate location = {0.f, 0.f}):
+        Widget(WidgetManager* parent, coordinate size = {0.3, 0.3}, coordinate location = {0.f, 0.f}):
         parent_(parent)
         {
             setSize(size);
@@ -55,6 +58,8 @@ namespace gui
     
     public:
         virtual void draw(); //default: draw blue rectangle in W
+        
+        virtual void close();
 
     public:
         //turn local coordinate into abcolute pixels coordinate system FOR CALLING SFML-FUNCTIONS 
@@ -76,7 +81,7 @@ namespace gui
         std::vector<Widget*> widgets_;
 
     public:
-        WidgetManager(Widget* parent, coordinate size = {0.3, 0.3}, coordinate location = {0.f, 0.f}):
+        WidgetManager(WidgetManager* parent, coordinate size = {0.3, 0.3}, coordinate location = {0.f, 0.f}):
         Widget(parent, size, location)
         {};
         ~WidgetManager() override
@@ -88,6 +93,10 @@ namespace gui
         }
 
     public:
+        //void close() override;
+        virtual void reDrawSig();
+
+    public:
         bool catchEvent(const sf::Event event) override; // still useless shit
         //calculates whether his box is clicked, if yes, sends the click to his widgets
         bool catchClick (Click click) override;
@@ -95,6 +104,7 @@ namespace gui
     public:
         void pushWidget(Widget* widget_ptr);
         void popWidget();
+        void rmWidget(Widget* widget_ptr);
 
     public:
         coordinate locationToPosition(coordinate location) const override;
@@ -106,16 +116,29 @@ namespace gui
     {
     private:
         coordinate scale_;
+        bool needReDraw;
+
     public:
         WidgetMaster(sf::Vector2f size, const char* window_name);
 
+    public:
         coordinate locationToPosition (coordinate location) const override;
 
         coordinate positionToLocation (coordinate position) const override;
 
+    public:
         bool catchEvent(const sf::Event event) override;//still can catch only Click
 
         bool catchClick(Click click) override;//recalc pixel pos to loc coord and pass click to his widgets
+    
+    public:
+        void reDrawSig() override;
+
+    public:
+        void loop();
+
+    public:
+        void drawAll();
     };
 }
 

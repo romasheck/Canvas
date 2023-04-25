@@ -19,7 +19,7 @@ namespace gui
         sf::CircleShape currentStain_;
 
     public:
-        Canvas(Widget* parent, coordinate size, coordinate location):
+        Canvas(WidgetManager* parent, coordinate size, coordinate location):
         Clickable(parent, size, location),
         Widget(parent, size, location),
         currentColor_(sf::Color::Red)

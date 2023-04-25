@@ -9,39 +9,6 @@ namespace gui
         return &canvas_master;
     }
     
-    void CanvasMaster::drawAll()
-    {
-        for (const auto& widget_ptr: widgets_)
-        {
-            widget_ptr->draw();
-        }
-
-        window_ptr->display();
-    }
-
-    void CanvasMaster::loop()
-    {
-        while (window_ptr->isOpen())
-        {
-            sf::Event event;
-            
-            while (window_ptr->pollEvent(event))
-            {
-                if (event.type == sf::Event::Closed)
-                {
-                    window_ptr->close();
-                }
-                else
-                {
-                    catchEvent(event);
-                }
-            }
-
-            window_ptr->display();
-            sf::sleep(sf::milliseconds(100));//delay
-        }
-    }
-
     void CanvasMaster::createCanvas(coordinate size, coordinate location)
     {
         canvas_ptr_ = new Canvas(this, size, location);

@@ -3,7 +3,7 @@
 namespace gui
 {
 //======================================================
-    bool WidBox::inMe (const coordinate position)
+    bool WidBox::inMe (const coordinate position) const
     {
         if (position.x_ > location_.x_ && \
             position.x_ < (location_.x_ + size_.x_) &&\
@@ -34,6 +34,14 @@ namespace gui
         bad_view_.setFillColor(sf::Color::Blue);
 
         window_ptr->draw(bad_view_);
+    }
+
+    void Widget::close()
+    {
+        parent_->rmWidget(this);
+        parent_->reDrawSig();
+
+        delete this;
     }
 
     bool Widget::catchEvent(const sf::Event event)
@@ -133,6 +141,12 @@ namespace gui
         widgets_.pop_back();
     }
 
+    void WidgetManager::rmWidget(Widget* widget_ptr)
+    {
+        widgets_.erase(std::remove(widgets_.begin(),\
+                        widgets_.end(), widget_ptr), widgets_.end());
+    }
+
     coordinate WidgetManager::locationToPosition(coordinate location) const
     {
 
@@ -145,10 +159,16 @@ namespace gui
     {
         return (position - location_)/size_;
     }
+
+    void WidgetManager::reDrawSig()
+    {
+        parent_->reDrawSig();
+    }
 //======================================================
     WidgetMaster::WidgetMaster(sf::Vector2f size, const char* window_name):
     WidgetManager(nullptr, {1, 1}, {0, 0}),
-    Widget(nullptr, {1, 1}, {0, 0})
+    Widget(nullptr, {1, 1}, {0, 0}),
+    needReDraw(false)
     {
         window_ptr = new sf::RenderWindow(sf::VideoMode(size.x, size.y), window_name);
         scale_ = coordinate((float)window_ptr->getSize().x, (float)window_ptr->getSize().y);
@@ -204,5 +224,50 @@ namespace gui
         }
 
         return catched;
+    }
+
+    void WidgetMaster::reDrawSig()
+    {
+        needReDraw = true;
+    }
+
+    void WidgetMaster::loop()
+    {
+        if (needReDraw = true)
+        {
+            drawAll();
+        }
+
+        while (window_ptr->isOpen())
+        {
+            sf::Event event;
+            
+            while (window_ptr->pollEvent(event))
+            {
+                if (event.type == sf::Event::Closed)
+                {
+                    window_ptr->close();
+                }
+                else
+                {
+                    catchEvent(event);
+                }
+            }
+
+            window_ptr->display();
+            sf::sleep(sf::milliseconds(10));//delay
+        }
+    }
+
+    void WidgetMaster::drawAll()
+    {
+        for (const auto& widget_ptr: widgets_)
+        {
+            widget_ptr->draw();
+        }
+
+        window_ptr->display();
+
+        needReDraw = false;
     }
 }

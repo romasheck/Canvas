@@ -11,7 +11,7 @@ namespace gui
         sf::RectangleShape background_;
 
     public:
-        Panel(Canvas& canvas, Widget* parent, coordinate size = {0.3, 0.3}, coordinate location = {0.f, 0.f}):
+        Panel(Canvas& canvas, WidgetManager* parent, coordinate size = {0.3, 0.3}, coordinate location = {0.f, 0.f}):
         CWidgetManager(canvas, parent, size, location),
         Widget(parent, size, location)
         {
