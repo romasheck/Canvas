@@ -25,26 +25,10 @@ namespace gui
         void setLocation(const coordinate location) {location_ = location;}//useless
         coordinate getLocation () const {return location_;}//useless
 
-        bool inMe (const coordinate position)//position in widBox?
-        {
-            if (position.x_ > location_.x_ && \
-                position.x_ < (location_.x_ + size_.x_) &&\
-                position.y_ > location_.y_ && \
-                position.y_ < (location_.y_ + size_.y_))
-            {
-                return true;
-            }
-            return false;
-        }
+        bool inMe (const coordinate position);//position in widBox?
 
-        coordinate rtAngle() const //return right top angle of WidBox
-        {
-            return location_ + size_;
-        }
-        coordinate ltAngle() const //return left top angle of WidBox
-        {
-            return location_ + coordinate(0, size_.y_);
-        }
+        coordinate rtAngle() const;//return right top angle of WidBox
+        coordinate ltAngle() const;//return left top angle of WidBox
     };
 //==========================================================================
     class Widget : public WidBox //WidBox which can be drawn, can catch events (sp. click) and has parent
@@ -65,61 +49,25 @@ namespace gui
         virtual ~Widget() = default;
 
     public:
-        virtual bool catchEvent(const sf::Event event)
-        {
-            return false;
-        }
-        virtual bool catchClick (Click click)
-        {
-            return false;
-        }
+        virtual bool catchEvent(const sf::Event event);
+        
+        virtual bool catchClick (Click click);
     
     public:
-        virtual void draw() //default: draw blue rectangle in W
-        {
-            sf::RectangleShape bad_view_;
-
-            bad_view_.setSize(getSizeInPixels());
-            bad_view_.setPosition(getPosition());
-            bad_view_.setFillColor(sf::Color::Blue);
-
-            window_ptr->draw(bad_view_);
-        }
+        virtual void draw(); //default: draw blue rectangle in W
 
     public:
         //turn local coordinate into abcolute pixels coordinate system FOR CALLING SFML-FUNCTIONS 
-        virtual coordinate locationToPosition(coordinate location) const
-        {
-            return parent_->locationToPosition(location);
-        }
+        virtual coordinate locationToPosition(coordinate location) const;
+        
         //return absolute pixels position of left top angle FOR CALLING SFML-FUNCTIONS
-        coordinate getPosition() const
-        {
-            return Widget::locationToPosition(ltAngle());
-        }
+        coordinate getPosition() const;
+        
         //return real size of object in pixels FOR CALLING SFML-FUNCTIONS
-        coordinate getSizeInPixels () const
-        {
-            return cabs(Widget::locationToPosition(rtAngle()) - Widget::locationToPosition(location_)); 
-        }
+        coordinate getSizeInPixels () const;
 
     public:
-        void dumpMe (const char* name) const
-        {
-            printf("Widget %s\n", name);
-
-            location_.printMe("location");
-            size_.printMe("size");
-
-            rtAngle().printMe("rtAngle loc");
-            ltAngle().printMe("ltAngle loc");
-
-            getPosition().printMe("position");
-            getSizeInPixels().printMe("szInPxls");
-            
-            locationToPosition(location_).printMe("lbAngle");
-            locationToPosition(rtAngle()).printMe("rtAngle");   
-        }
+        void dumpMe (const char* name) const;
     };
 //==========================================================================
     class WidgetManager: virtual public Widget //Widget which contain several other
@@ -140,74 +88,18 @@ namespace gui
         }
 
     public:
-        bool catchEvent(const sf::Event event) override // still useless shit
-        {
-            bool catched = false;
-
-            for (auto it = widgets_.rbegin(); it != widgets_.rend(); ++it)
-            {
-                catched = (*it)->catchEvent(event);
-                if (catched == false)
-                {
-                    continue;
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-            return catched;
-        }
+        bool catchEvent(const sf::Event event) override; // still useless shit
         //calculates whether his box is clicked, if yes, sends the click to his widgets
-        bool catchClick (Click click) override
-        {
-            bool catched = false;
-
-            if (inMe(click.location_))
-            {
-                click.location_ = positionToLocation(click.location_);
-
-                for (auto it = widgets_.rbegin(); it != widgets_.rend(); ++it)
-                {
-                    catched = (*it)->catchClick(click);
-                    if (catched == false)
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-            }
-
-            return catched;
-        }
+        bool catchClick (Click click) override;
 
     public:
-        void pushWidget(Widget* widget_ptr)
-        {
-            widgets_.push_back(widget_ptr);
-        }
-        void popWidget()
-        {
-            widgets_.pop_back();
-        }
+        void pushWidget(Widget* widget_ptr);
+        void popWidget();
 
     public:
-        coordinate locationToPosition(coordinate location) const override
-        {
-
-            location.transmit (location_, size_);//transmit into parent system
-            
-            return parent_->locationToPosition(location);
-        }
+        coordinate locationToPosition(coordinate location) const override;
         //turn absolute position to local coordinate FOR CLICK
-        virtual coordinate positionToLocation(coordinate position) const
-        {
-            return (position - location_)/size_;
-        }
+        virtual coordinate positionToLocation(coordinate position) const;
     };
 //==========================================================================
     class WidgetMaster: public WidgetManager //Base for MainWidget and HAS NOT parent (nullptr)
@@ -223,57 +115,13 @@ namespace gui
             scale_ = coordinate((float)window_ptr->getSize().x, (float)window_ptr->getSize().y);
         };
 
-        coordinate locationToPosition (coordinate location) const override
-        {
-            location.y_ = 1 - location.y_;// make y_ upsidedown
+        coordinate locationToPosition (coordinate location) const override;
 
-            location = location*scale_;// multiply coordinate (from 0 to 1) on amount of pixels in side
+        coordinate positionToLocation (coordinate position) const override;
 
-            return location;
-        }
+        bool catchEvent(const sf::Event event) override;//still can catch only Click
 
-        coordinate positionToLocation (coordinate position) const override
-        {
-            position = position/scale_;// dev position in pixels on amount of pixels in side
-            
-            position.y_ = 1 - position.y_;// make y_ upsidedown
-
-            return position;
-        }
-
-        bool catchEvent(const sf::Event event) override //still can catch only Click
-        {
-            if (event.type == sf::Event::MouseButtonPressed)
-            {
-                if (catchClick(Click(event)))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        bool catchClick(Click click) override //recalc pixel pos to loc coord and pass click to his widgets
-        {
-            bool catched = false;
-
-            click.location_ = positionToLocation(click.location_);
-
-            for (auto it = widgets_.rbegin(); it != widgets_.rend(); ++it)
-            {
-                catched = (*it)->catchClick(click);
-                if (catched == false)
-                {
-                    continue;
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-            return catched;
-        }
+        bool catchClick(Click click) override;//recalc pixel pos to loc coord and pass click to his widgets
     };
 }
 

@@ -11,7 +11,7 @@ namespace gui
     This must be const, but only MainWidget can create window
     Because of it tihs can not be const
     */
-    sf::RenderWindow* window_ptr;
+    extern sf::RenderWindow* window_ptr;
     /*
     namespace Color//wtf?
     {
