@@ -107,13 +107,7 @@ namespace gui
     private:
         coordinate scale_;
     public:
-        WidgetMaster(sf::Vector2f size, const char* window_name):
-        WidgetManager(nullptr, {1, 1}, {0, 0}),
-        Widget(nullptr, {1, 1}, {0, 0})
-        {
-            window_ptr = new sf::RenderWindow(sf::VideoMode(size.x, size.y), window_name);
-            scale_ = coordinate((float)window_ptr->getSize().x, (float)window_ptr->getSize().y);
-        };
+        WidgetMaster(sf::Vector2f size, const char* window_name);
 
         coordinate locationToPosition (coordinate location) const override;
 

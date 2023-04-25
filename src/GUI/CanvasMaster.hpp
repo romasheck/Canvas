@@ -12,6 +12,9 @@
 
 namespace gui
 {
+    //  SINGLE TYPE
+    class CanvasMaster;
+    CanvasMaster* CanvasMasterCtor(sf::Vector2f size);
     //Main Widget
     //Contain other and catch every Event
     class CanvasMaster final: public WidgetMaster 
@@ -19,13 +22,15 @@ namespace gui
     private:
         Canvas* canvas_ptr_;//cratch!
 
-    public:
+    private:
         /// @brief Ctor with creating window with title "Canvas"
         /// @param size - absolute size of window (ex.:1920*1080)
         CanvasMaster(sf::Vector2f size):
         Widget(nullptr, {1, 1}, {0, 0}),
         WidgetMaster(size, "Canvas") 
         {};
+
+        CanvasMaster(const CanvasMaster&) = delete;
 
     public:
         //create all his Widgets
@@ -49,7 +54,7 @@ namespace gui
             auto color_reg_ptr = new ColorRegulator(color, *canvas_ptr_, (Widget*)this, size, location);
             pushWidget(std::move(color_reg_ptr));
         }*/
-        
+        friend CanvasMaster* CanvasMasterCtor(sf::Vector2f);  
     };
 }
 

@@ -3,6 +3,8 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <memory>
+
 namespace gui
 {
     /*
@@ -12,6 +14,20 @@ namespace gui
     Because of it tihs can not be const
     */
     extern sf::RenderWindow* window_ptr;
+    /*
+    class WidgetMaster;
+    class Context
+    {
+        friend WidgetMaster;
+    private:
+        std::unique_ptr<sf::RenderWindow> window_ptr;
+        void init(sf::Vector2f, const char*);
+
+    public:
+        sf::RenderWindow window()
+    };
+
+    extern Context context;*/
     /*
     namespace Color//wtf?
     {

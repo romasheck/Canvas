@@ -2,7 +2,6 @@
 
 namespace gui
 {
-    sf::RenderWindow* window_ptr;
 //======================================================
     bool WidBox::inMe (const coordinate position)
     {
@@ -147,6 +146,14 @@ namespace gui
         return (position - location_)/size_;
     }
 //======================================================
+    WidgetMaster::WidgetMaster(sf::Vector2f size, const char* window_name):
+    WidgetManager(nullptr, {1, 1}, {0, 0}),
+    Widget(nullptr, {1, 1}, {0, 0})
+    {
+        window_ptr = new sf::RenderWindow(sf::VideoMode(size.x, size.y), window_name);
+        scale_ = coordinate((float)window_ptr->getSize().x, (float)window_ptr->getSize().y);
+    };
+    
     coordinate WidgetMaster::locationToPosition (coordinate location) const
     {
         location.y_ = 1 - location.y_;// make y_ upsidedown

@@ -2,6 +2,13 @@
 
 namespace gui
 {
+    CanvasMaster* CanvasMasterCtor(sf::Vector2f size)
+    {
+        static CanvasMaster canvas_master(size);
+
+        return &canvas_master;
+    }
+    
     void CanvasMaster::drawAll()
     {
         for (const auto& widget_ptr: widgets_)
