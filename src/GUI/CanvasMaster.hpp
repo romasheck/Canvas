@@ -9,6 +9,7 @@
 #include "CWidget.hpp"
 #include "CollorRegulator.hpp"
 #include "Panel.hpp"
+#include "ClearButtom.hpp"
 
 namespace gui
 {
@@ -39,11 +40,13 @@ namespace gui
             createCanvas({0.7, 0.8}, {0.1, 0.1});
             createPanel({0.1, 0.8}, \
                         canvas_ptr_->location_ + canvas_ptr_->size_ - coordinate(0, 0.8));
+            createClearButtom({0.1, 0.1}, {0.05, 0.85});
         }
 
     private:
         void createCanvas(coordinate size, coordinate location);
         void createPanel(coordinate size, coordinate location);
+        void createClearButtom(coordinate size, coordinate location);
         /*
         void createColorRegulator(sf::Color color, coordinate size, coordinate location)
         {

@@ -228,20 +228,24 @@ namespace gui
 
     void WidgetMaster::reDrawSig()
     {
+        //std::cout<<"redraw sig in master\n";
         needReDraw = true;
     }
 
     void WidgetMaster::loop()
     {
-        if (needReDraw = true)
-        {
-            drawAll();
-        }
-
+        sf::Event event;
+        
         while (window_ptr->isOpen())
         {
-            sf::Event event;
-            
+            if (needReDraw == true)
+            {
+                std::cout<<"redrawing"<<std::endl;
+                //window_ptr->display();
+                window_ptr->clear();
+                drawAll();
+            }
+    
             while (window_ptr->pollEvent(event))
             {
                 if (event.type == sf::Event::Closed)

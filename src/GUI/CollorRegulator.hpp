@@ -13,10 +13,10 @@ namespace gui
             sf::RectangleShape view_;  // the view of ColorRegulator
         
         public:
-            ColorRegulator(const sf::Color choisenColor, Canvas& canvas_ptr, WidgetManager* parent, coordinate size = {0.3, 0.3}, coordinate location = {0.f, 0.f}):
+            ColorRegulator(const sf::Color choisenColor, Canvas& canvas, WidgetManager* parent, coordinate size = {0.3, 0.3}, coordinate location = {0.f, 0.f}):
             Widget(parent, size, location),
             Clickable(parent, size, location),
-            CWidget(canvas_ptr, parent, size, location),
+            CWidget(canvas, parent, size, location),
             choisenColor_(choisenColor)
             {
                 view_.setFillColor(choisenColor_);
