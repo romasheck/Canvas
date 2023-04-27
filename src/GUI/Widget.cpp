@@ -27,13 +27,35 @@ namespace gui
 //======================================================
     void Widget::draw() //default: draw blue rectangle in W
     {
-        sf::RectangleShape bad_view_;
+        sprite_.setPosition(getPosition());
+        
+        sf::Texture bad_view;
+        //bad_view.create(100, 100);
+        //bad_view.create(getSizeInPixels().x_, getSizeInPixels().y_);
+        bad_view.loadFromFile("/home/princep/PROGS/OOP/canvas/assets/textures/maxresdefault.jpg");
+        //coordinate{bad_view.getSize().x, bad_view.getSize().y}.printMe("size of texture");
+        
+        sprite_.setTexture(bad_view);
+        sprite_.scale({getSizeInPixels().x_/(bad_view.getSize()).x, getSizeInPixels().y_/bad_view.getSize().y});
+
+        window_ptr->draw(sprite_);
+
+        sf::Font font;
+        font.loadFromFile("/home/princep/PROGS/OOP/canvas/assets/fonts/FFF_Tusj.ttf");
+        sf::Text error_msg;
+        error_msg.setFont(font);
+        error_msg.setString("Ha-ha!");
+        error_msg.setCharacterSize((locationToPosition(rtAngle())-getPosition()).x_*2/3);
+        error_msg.setPosition(getPosition() - getSizeInPixels()/3);
+        
+        window_ptr->draw(sprite_);
+        /*sf::RectangleShape bad_view_;
 
         bad_view_.setSize(getSizeInPixels());
         bad_view_.setPosition(getPosition());
         bad_view_.setFillColor(sf::Color::Blue);
 
-        window_ptr->draw(bad_view_);
+        window_ptr->draw(bad_view_);*/
     }
 
     void Widget::close()

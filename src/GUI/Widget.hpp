@@ -5,6 +5,7 @@
 #include "coordinate.hpp"
 #include "Pixel.hpp"
 #include "Events.hpp"
+//#include "View.hpp"
 //#include "GrShapes.hpp"
 #include <iostream>
 #include <memory.h>
@@ -38,6 +39,7 @@ namespace gui
     {
     protected:
         WidgetManager * parent_;
+        sf::Sprite sprite_;
 
     public:
         Widget(WidgetManager* parent, coordinate size = {0.3, 0.3}, coordinate location = {0.f, 0.f}):
@@ -50,6 +52,11 @@ namespace gui
         Widget(const Widget& widget) = delete;
         //virtual Dtor 
         virtual ~Widget() = default;
+
+    public:
+        void setSprite(const sf::Sprite& sprite);
+        void setSprite(const sf::RenderTexture& texture);
+        void setSprite(const sf::Color color);
 
     public:
         virtual bool catchEvent(const sf::Event event);
