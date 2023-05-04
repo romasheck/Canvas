@@ -33,13 +33,14 @@ namespace gui
 
         coordinate rtAngle() const;//return right top angle of WidBox
         coordinate ltAngle() const;//return left top angle of WidBox
+        coordinate rbAngle() const;
     };
 //==========================================================================
     class Widget : public WidBox //WidBox which can be drawn, can catch events (sp. click) and has parent
     {
     protected:
         WidgetManager * parent_;
-        sf::Sprite sprite_;
+        sf::Sprite view;
 
     public:
         Widget(WidgetManager* parent, coordinate size = {0.3, 0.3}, coordinate location = {0.f, 0.f}):
@@ -53,10 +54,17 @@ namespace gui
         //virtual Dtor 
         virtual ~Widget() = default;
 
-    public:
-        void setSprite(const sf::Sprite& sprite);
-        void setSprite(const sf::RenderTexture& texture);
-        void setSprite(const sf::Color color);
+    protected:
+        void viewInit(const std::string& texture_path, const std::string& text);
+        //void viewInit(const std::string& texture_path, const std::string& text, const std::string& font);
+        //void viewInit(const sf::Color);
+        //void viewInit(const sf::Color, const std::string& text);
+        //void viewInit(const sf::Color, const std::string& text, const std::string& font);
+
+        //void viewUpdBox();
+        //void setSprite(const sf::Sprite& sprite);
+        //void setSprite(const sf::RenderTexture& texture);
+        //void setSprite(const sf::Color color);
 
     public:
         virtual bool catchEvent(const sf::Event event);
@@ -127,7 +135,8 @@ namespace gui
 
     public:
         WidgetMaster(sf::Vector2f size, const char* window_name);
-
+        ~WidgetMaster();
+        
     public:
         coordinate locationToPosition (coordinate location) const override;
 

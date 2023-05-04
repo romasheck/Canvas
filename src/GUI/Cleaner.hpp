@@ -1,18 +1,18 @@
-#ifndef CLEARBUTTOM_HPP
-#define CLEARBUTTOM_HPP
+#ifndef CLEANER_HPP
+#define CLEANER_HPP
 
 #include "Clickable.hpp"
 #include "CWidget.hpp"
 
 namespace gui
 {
-    class ClearButtom: public Clickable, public CWidget
+    class Cleaner: public Clickable, public CWidget
     {
     private:
         sf::RectangleShape view_;
 
     public:
-        ClearButtom(Canvas& canvas, WidgetManager* parent, coordinate size = {0.3, 0.3}, coordinate location = {0.f, 0.f}):
+        Cleaner(Canvas& canvas, WidgetManager* parent, coordinate size = {0.3, 0.3}, coordinate location = {0.f, 0.f}):
             Widget(parent, size, location),
             Clickable(parent, size, location),
             CWidget(canvas, parent, size, location)

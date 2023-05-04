@@ -23,9 +23,9 @@ namespace gui
         panel_ptr->createAll();
     }
 
-    void CanvasMaster::createClearButtom(coordinate size, coordinate location)
+    void CanvasMaster::createCleaner(coordinate size, coordinate location)
     {
-        auto butt_ptr = new ClearButtom(*canvas_ptr_, this, size, location);
+        auto butt_ptr = new Cleaner(*canvas_ptr_, this, size, location);
         pushWidget(butt_ptr);
     }
 }

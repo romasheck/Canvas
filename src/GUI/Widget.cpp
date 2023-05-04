@@ -24,16 +24,19 @@ namespace gui
     {
         return location_ + coordinate(0, size_.y_);
     }
-//======================================================
-    void Widget::draw() //default: draw blue rectangle in W
+
+    coordinate WidBox::rbAngle() const
     {
+        return location_ + coordinate(size_.x_, 0);
+    }
+//======================================================
+    void Widget::viewInit(const std::string& texture_path, const std::string& text)
+    {
+        sf::Sprite sprite_;
         sprite_.setPosition(getPosition());
         
         sf::Texture bad_view;
-        //bad_view.create(100, 100);
-        //bad_view.create(getSizeInPixels().x_, getSizeInPixels().y_);
-        bad_view.loadFromFile("/home/princep/PROGS/OOP/canvas/assets/textures/maxresdefault.jpg");
-        //coordinate{bad_view.getSize().x, bad_view.getSize().y}.printMe("size of texture");
+        bad_view.loadFromFile("assets/textures/maxresdefault.jpg");
         
         sprite_.setTexture(bad_view);
         sprite_.scale({getSizeInPixels().x_/(bad_view.getSize()).x, getSizeInPixels().y_/bad_view.getSize().y});
@@ -41,14 +44,41 @@ namespace gui
         window_ptr->draw(sprite_);
 
         sf::Font font;
-        font.loadFromFile("/home/princep/PROGS/OOP/canvas/assets/fonts/FFF_Tusj.ttf");
+        font.loadFromFile("assets/fonts/FFF_Tusj.ttf");
         sf::Text error_msg;
         error_msg.setFont(font);
         error_msg.setString("Ha-ha!");
         error_msg.setCharacterSize((locationToPosition(rtAngle())-getPosition()).x_*2/3);
         error_msg.setPosition(getPosition() - getSizeInPixels()/3);
+    }
+    
+    void Widget::draw() //default: draw blue rectangle in W
+    {
+        sf::Sprite sprite_;
+        sprite_.setPosition(getPosition());
         
+        sf::Texture bad_view;
+        bad_view.loadFromFile("assets/textures/maxresdefault.jpg");
+        
+        sprite_.setTexture(bad_view);
+        sprite_.scale({getSizeInPixels().x_/(bad_view.getSize()).x, getSizeInPixels().y_/bad_view.getSize().y});
+
         window_ptr->draw(sprite_);
+
+        sf::Font font;
+        font.loadFromFile("assets/fonts/Raleway-Black.ttf");
+        sf::Text error_msg;
+        error_msg.setFont(font);
+        error_msg.setColor(sf::Color::Yellow);
+        error_msg.setString("H");
+        //error_msg.setCharacterSize(getSizeInPixels().x_/error_msg.getString().getSize());
+        error_msg.setCharacterSize(200);
+        //error_msg.setPosition(getPosition() + coordinate(getSizeInPixels().x_/3, getSizeInPixels().y_/2));
+        auto pos = parent_->locationToPosition({0.05, 0.95});
+        error_msg.setPosition(pos.x_, pos.y_);
+        printf("text must be o (%f, %f) with size %d\n", error_msg.getPosition().x, error_msg.getPosition().y, error_msg.getCharacterSize());
+        //std::cout<<"text\n";
+        window_ptr->draw(error_msg);
         /*sf::RectangleShape bad_view_;
 
         bad_view_.setSize(getSizeInPixels());
@@ -194,7 +224,15 @@ namespace gui
     {
         window_ptr = new sf::RenderWindow(sf::VideoMode(size.x, size.y), window_name);
         scale_ = coordinate((float)window_ptr->getSize().x, (float)window_ptr->getSize().y);
+    
+        context_ptr = new Context;
+        context_ptr->window_ptr->create(sf::VideoMode(size.x, size.y), window_name);
     };
+
+    WidgetMaster::~WidgetMaster()
+    {
+        delete context_ptr;
+    }
     
     coordinate WidgetMaster::locationToPosition (coordinate location) const
     {
@@ -260,12 +298,14 @@ namespace gui
         
         while (window_ptr->isOpen())
         {
-            if (needReDraw == true)
+            if (needReDraw)
             {
-                std::cout<<"redrawing"<<std::endl;
+                //std::cout<<"redrawing"<<std::endl;
                 //window_ptr->display();
                 window_ptr->clear();
                 drawAll();
+                //window_ptr->display();
+                //std::cout<<"redrawing end\n";
             }
     
             while (window_ptr->pollEvent(event))
@@ -279,7 +319,7 @@ namespace gui
                     catchEvent(event);
                 }
             }
-
+            //std::cout<<"display\n";
             window_ptr->display();
             sf::sleep(sf::milliseconds(10));//delay
         }
@@ -292,7 +332,7 @@ namespace gui
             widget_ptr->draw();
         }
 
-        window_ptr->display();
+        //window_ptr->display();
 
         needReDraw = false;
     }

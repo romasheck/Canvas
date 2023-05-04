@@ -13,7 +13,7 @@ int main()
     canvas_master_ptr->createAll();
     gui::Widget* test_widget_ptr = new gui::Widget(canvas_master_ptr, {0.5, 0.3}, {0.2, 0.3});
     canvas_master_ptr->pushWidget(test_widget_ptr);
-    test_widget_ptr->dumpMe("test");
+    //test_widget_ptr->dumpMe("test");
     canvas_master_ptr->drawAll();
 
     canvas_master_ptr->loop();
