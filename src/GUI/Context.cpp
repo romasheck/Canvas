@@ -1,5 +1,4 @@
-#include "Context.hpp"
-#include "AssetManager.hpp"
+#include "../../include/GUI/Context.hpp"
 
 namespace gui {
     Context::Context() {

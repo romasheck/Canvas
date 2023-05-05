@@ -1,4 +1,4 @@
-#include "Text.hpp"
+#include "../../include/GUI/Text.hpp"
 
 namespace gui
 {

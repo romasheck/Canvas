@@ -6,6 +6,8 @@
 #include "Pixel.hpp"
 #include "Events.hpp"
 //#include "View.hpp"
+#include "Context.hpp"
+//#include "View.hpp"
 //#include "GrShapes.hpp"
 #include <iostream>
 #include <memory.h>
@@ -40,7 +42,9 @@ namespace gui
     {
     protected:
         WidgetManager * parent_;
-        sf::Sprite view;
+        //sf::Sprite view_;
+        //sf::Text text;
+        //View view_;
 
     public:
         Widget(WidgetManager* parent, coordinate size = {0.3, 0.3}, coordinate location = {0.f, 0.f}):
@@ -55,7 +59,9 @@ namespace gui
         virtual ~Widget() = default;
 
     protected:
+
         void viewInit(const std::string& texture_path, const std::string& text);
+        void viewUpdate();
         //void viewInit(const std::string& texture_path, const std::string& text, const std::string& font);
         //void viewInit(const sf::Color);
         //void viewInit(const sf::Color, const std::string& text);
@@ -72,7 +78,7 @@ namespace gui
         virtual bool catchClick (Click click);
     
     public:
-        virtual void draw(); //default: draw blue rectangle in W
+        virtual void draw(); //default: draw troll face with text "Ha-ha!"
         
         virtual void close();
 
@@ -108,6 +114,7 @@ namespace gui
         }
 
     public:
+        //void draw() override;
         //void close() override;
         virtual void reDrawSig();
 

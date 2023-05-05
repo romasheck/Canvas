@@ -1,9 +1,7 @@
 #ifndef GUI_HPP
 #define GUI_HPP
 
-#include "gui_lib.hpp"
-#include "Canvas.hpp"
-#include "CanvasMaster.hpp"
+#include "GUI/CanvasMaster.hpp"
 
 namespace gui
 {

@@ -1,5 +1,5 @@
 #pragma once
-#include "AssetManager.hpp"
+#include "../../include/GUI/AssetManager.hpp"
 #include <memory>
 #include <SFML/Graphics/RenderWindow.hpp>
 
@@ -18,6 +18,8 @@ namespace gui {
         const sf::Texture& getTexture(const TEXTURE_ID texture_id) const;
 
         sf::RenderWindow& window(); 
+
+        
 
     private:
         std::unique_ptr<sf::RenderWindow> window_ptr;

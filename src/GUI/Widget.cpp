@@ -1,4 +1,5 @@
-#include "Widget.hpp"
+#include "../../include/GUI/Widget.hpp"
+#include "../../include/GUI/Context.hpp"
 
 namespace gui
 {
@@ -30,7 +31,7 @@ namespace gui
         return location_ + coordinate(size_.x_, 0);
     }
 //======================================================
-    void Widget::viewInit(const std::string& texture_path, const std::string& text)
+    /*void Widget::viewInit(const std::string& texture_path, const std::string& text)
     {
         sf::Sprite sprite_;
         sprite_.setPosition(getPosition());
@@ -41,7 +42,7 @@ namespace gui
         sprite_.setTexture(bad_view);
         sprite_.scale({getSizeInPixels().x_/(bad_view.getSize()).x, getSizeInPixels().y_/bad_view.getSize().y});
 
-        window_ptr->draw(sprite_);
+        context_ptr->window().draw(sprite_);
 
         sf::Font font;
         font.loadFromFile("assets/fonts/FFF_Tusj.ttf");
@@ -50,42 +51,39 @@ namespace gui
         error_msg.setString("Ha-ha!");
         error_msg.setCharacterSize((locationToPosition(rtAngle())-getPosition()).x_*2/3);
         error_msg.setPosition(getPosition() - getSizeInPixels()/3);
-    }
-    
-    void Widget::draw() //default: draw blue rectangle in W
-    {
-        sf::Sprite sprite_;
-        sprite_.setPosition(getPosition());
-        
-        sf::Texture bad_view;
-        bad_view.loadFromFile("assets/textures/maxresdefault.jpg");
-        
-        sprite_.setTexture(bad_view);
-        sprite_.scale({getSizeInPixels().x_/(bad_view.getSize()).x, getSizeInPixels().y_/bad_view.getSize().y});
+    }*/
 
-        window_ptr->draw(sprite_);
+    void Widget::draw() //default: draw fucking troll face with text: "Ha-ha!"
+    {   
+        //TEXTURE
+        sf::Sprite view_;
+        view_.setPosition(getPosition());
+        
+        sf::Texture bad_view = context_ptr->getTexture(TEXTURE_ID::DEFAULT);
+        
+        view_.setTexture(bad_view);
+        view_.scale({getSizeInPixels().x_/(bad_view.getSize()).x, getSizeInPixels().y_/bad_view.getSize().y});
 
-        sf::Font font;
-        font.loadFromFile("assets/fonts/Raleway-Black.ttf");
-        sf::Text error_msg;
-        error_msg.setFont(font);
+        context_ptr->window().draw(view_);
+
+        //TEXT
+        sf::Font font = context_ptr->getFont(FONT_ID::DEFAULT);
+        sf::Text error_msg("Ha-ha!", font);
         error_msg.setColor(sf::Color::Yellow);
-        error_msg.setString("H");
-        //error_msg.setCharacterSize(getSizeInPixels().x_/error_msg.getString().getSize());
-        error_msg.setCharacterSize(200);
-        //error_msg.setPosition(getPosition() + coordinate(getSizeInPixels().x_/3, getSizeInPixels().y_/2));
-        auto pos = parent_->locationToPosition({0.05, 0.95});
-        error_msg.setPosition(pos.x_, pos.y_);
-        printf("text must be o (%f, %f) with size %d\n", error_msg.getPosition().x, error_msg.getPosition().y, error_msg.getCharacterSize());
-        //std::cout<<"text\n";
-        window_ptr->draw(error_msg);
-        /*sf::RectangleShape bad_view_;
+        
+        coordinate text_lbAngle = coordinate(0.1f, 0.1f)*size_ + location_; 
+        coordinate text_LocalSize = coordinate(0.5, 0.5) * size_;
 
-        bad_view_.setSize(getSizeInPixels());
-        bad_view_.setPosition(getPosition());
-        bad_view_.setFillColor(sf::Color::Blue);
+        coordinate text_pSize = cabs(locationToPosition(text_lbAngle + text_LocalSize) - locationToPosition(text_lbAngle));
+        coordinate text_pos = locationToPosition(text_lbAngle + coordinate(0, text_LocalSize.y_));
 
-        window_ptr->draw(bad_view_);*/
+        sf::FloatRect textRect = error_msg.getLocalBounds();
+
+        error_msg.setScale(text_pSize.x_/ (textRect.width + textRect.left), text_pSize.y_ / (textRect.height + textRect.top));
+        
+        error_msg.setPosition(text_pos.x_, text_pos.y_);
+
+        context_ptr->window().draw(error_msg);
     }
 
     void Widget::close()
@@ -222,12 +220,17 @@ namespace gui
     Widget(nullptr, {1, 1}, {0, 0}),
     needReDraw(false)
     {
-        window_ptr = new sf::RenderWindow(sf::VideoMode(size.x, size.y), window_name);
-        scale_ = coordinate((float)window_ptr->getSize().x, (float)window_ptr->getSize().y);
-    
+        //window_ptr = new sf::RenderWindow(sf::VideoMode(size.x, size.y), window_name);
+        //scale_ = coordinate((float)context_ptr->window().getSize().x, (float)context_ptr->window().getSize().y);
+        
         context_ptr = new Context;
-        context_ptr->window_ptr->create(sf::VideoMode(size.x, size.y), window_name);
-    };
+
+        context_ptr->window().create(sf::VideoMode(size.x, size.y), window_name);
+        scale_ = coordinate((float)context_ptr->window().getSize().x, (float)context_ptr->window().getSize().y);
+
+        context_ptr->addFont(FONT_ID::DEFAULT, "assets/fonts/Raleway-Black.ttf");
+        context_ptr->addTexture(TEXTURE_ID::DEFAULT, "assets/textures/maxresdefault.jpg");
+    }
 
     WidgetMaster::~WidgetMaster()
     {
@@ -296,23 +299,23 @@ namespace gui
     {
         sf::Event event;
         
-        while (window_ptr->isOpen())
+        while (context_ptr->window().isOpen())
         {
             if (needReDraw)
             {
                 //std::cout<<"redrawing"<<std::endl;
-                //window_ptr->display();
-                window_ptr->clear();
+                //context_ptr->window().display();
+                context_ptr->window().clear();
                 drawAll();
-                //window_ptr->display();
+                //context_ptr->window().display();
                 //std::cout<<"redrawing end\n";
             }
     
-            while (window_ptr->pollEvent(event))
+            while (context_ptr->window().pollEvent(event))
             {
                 if (event.type == sf::Event::Closed)
                 {
-                    window_ptr->close();
+                    context_ptr->window().close();
                 }
                 else
                 {
@@ -320,7 +323,7 @@ namespace gui
                 }
             }
             //std::cout<<"display\n";
-            window_ptr->display();
+            context_ptr->window().display();
             sf::sleep(sf::milliseconds(10));//delay
         }
     }
@@ -332,7 +335,7 @@ namespace gui
             widget_ptr->draw();
         }
 
-        //window_ptr->display();
+        //context_ptr->window().display();
 
         needReDraw = false;
     }

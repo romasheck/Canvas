@@ -1,9 +1,6 @@
 #include <iostream>
-#include <SFML/Graphics.hpp>
-#include <unistd.h>
-#include <SFML/System/Sleep.hpp>
 
-#include "GUI/gui.hpp"
+#include "../include/gui.hpp"
 
 
 int main()

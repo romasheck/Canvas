@@ -1,10 +1,10 @@
-#include "Panel.hpp"
+#include "../../include/GUI/Panel.hpp"
 
 namespace gui
 {
     void Panel::draw()
     {
-        window_ptr->draw(background_);
+        context_ptr->window().draw(background_);
 
         for (const auto& widget_ptr: widgets_)
         {

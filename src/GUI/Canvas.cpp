@@ -1,4 +1,4 @@
-#include "Canvas.hpp"
+#include "../../include/GUI/Canvas.hpp"
 
 namespace gui
 {
@@ -14,14 +14,15 @@ namespace gui
         currentStain_.setFillColor(currentColor_);
         currentStain_.setPosition(clickPosition - sf::Vector2f{currentStain_.getRadius(), currentStain_.getRadius()});
         // stains.push_back(new sf::CircleShape());
-        window_ptr->draw(currentStain_);
+        context_ptr->window().draw(currentStain_);
         //std::cout<<"stain must be on the"<<" "<<clickPosition.x<<" "<<clickPosition.y<<std::endl;
     }
 
     void Canvas::draw()
     {
         //return;
-        window_ptr->draw(area_);
+        context_ptr->window().draw(area_);
         //std::cout<<1<<std::endl;
+        printf ("canvas\n");
     }
 }

@@ -1,4 +1,4 @@
-#include "AssetManager.hpp"
+#include "../../include/GUI/AssetManager.hpp"
 #include <stdexcept>
 
 

@@ -5,7 +5,7 @@
 #include <iostream>
 #include <memory>
 
-#include "Context.hpp"
+//#include "Context.hpp"
 
 namespace gui
 {
@@ -15,7 +15,7 @@ namespace gui
     This must be const, but only MainWidget can create window
     Because of it tihs can not be const
     */
-    extern sf::RenderWindow* window_ptr;
+    //extern sf::RenderWindow* window_ptr;
 }
 
 #endif

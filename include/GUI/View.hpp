@@ -11,8 +11,6 @@ namespace gui
     private:
         //sf::Sprite sprite_;
         sf::Texture texture_;
-        
-        sf::Font font_;
         sf::Texture text_;
 
     public:
@@ -23,8 +21,8 @@ namespace gui
         void draw() const;
 
     public:
-        void setSize        (const std::string& size);
-        void setPosition    (const std::string& pos);
+        void setSize        (const coordinate size);
+        void setPosition    (const coordinate pos);
 
     public:
         void setFont        (const std::string& font_path);

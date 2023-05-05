@@ -35,13 +35,7 @@ namespace gui
 
     public:
         //create all his Widgets
-        void createAll()
-        {
-            createCanvas({0.7, 0.8}, {0.1, 0.1});
-            createPanel({0.1, 0.8}, \
-                        canvas_ptr_->location_ + canvas_ptr_->size_ - coordinate(0, 0.8));
-            createCleaner({0.1, 0.1}, {0.05, 0.85});
-        }
+        void createAll();
 
     private:
         void createCanvas(coordinate size, coordinate location);

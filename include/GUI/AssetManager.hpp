@@ -8,14 +8,18 @@ namespace gui
 {   
     enum class TEXTURE_ID
     {
-        MAIN_MENU_BG,
-        PLAYER_SHEET,
-        TILE_SHEET,
+        DEFAULT,
+        CLEANER, 
+        DOT_BUTTOM,
+        LINE_BUTTOM, 
+        CIRCLE_BUTTOM,
     };
 
     enum class FONT_ID
     {
-        MAIN_FONT,
+        DEFAULT,
+        PRETY,
+
     };
 
     class AssetManager final {

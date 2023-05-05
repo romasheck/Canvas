@@ -1,8 +1,8 @@
-#include "gui_lib.hpp"
+#include "../../include/GUI/gui_lib.hpp"
 
 namespace gui
 {
-    sf::RenderWindow* window_ptr;
+    //sf::RenderWindow* window_ptr;
     /*Context context;
 
     void Context::init(sf::Vector2f size, const char* window_name)
