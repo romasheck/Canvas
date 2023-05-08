@@ -1,2 +1,2 @@
 all:
-	g++ src/*.cpp -o build/prog -lsfml-graphics -lsfml-window -Wextra -Wconversion -lsfml-system
+	g++ src/GEO/*.cpp src/*.cpp -o build/prog -lsfml-graphics -lsfml-window -Wextra -lsfml-system

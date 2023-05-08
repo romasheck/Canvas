@@ -5,17 +5,19 @@
 
 namespace geo
 {
-    class FigureMaster
+    const float PointRad = 0.3;
+
+    class FigureManager
     {
     public:
         std::vector<Figure*> figures_;
 
     public:
-        FigureMaster()
+        FigureManager()
             {};
-        ~FigureMaster()
+        ~FigureManager()
         {
-            for (const auto& figure_ptr: figures_)
+            for (auto figure_ptr: figures_)
             {
                 delete figure_ptr;
             }
@@ -31,6 +33,15 @@ namespace geo
             figures_.pop_back();
         }
 
+    public:
+        Figure* whichFig(Point);
+
+        /// @brief  Находит точки пересечения данной фигуры с остальными и добавляет их в вектор фигур
+        /// @param  Figure* данная фигура
+        /// @return Колличество точек пересечения
+        int     IntersectWithAll(Figure* fig);
+
+        void    debugPrintFigures();
     };
 
 
