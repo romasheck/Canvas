@@ -22,6 +22,9 @@ class coordinate
         x_(coord.x_),y_(coord.y_)
         {};
         coordinate() {x_ = 0; y_ = 0;}
+        coordinate (sf::Vector2f coord): 
+        x_(coord.x), y_(coord.y)
+        {};
 
     public:
         
@@ -97,6 +100,11 @@ class coordinate
     inline coordinate cabs(const coordinate arg)
     {
         return coordinate(abs(arg.x_), abs(arg.y_));
+    }
+
+    inline float dist(const coordinate arg1, const coordinate arg2)
+    {
+        return sqrtf((arg1.x_ - arg2.x_)*(arg1.x_ - arg2.x_) + (arg1.y_ - arg2.y_)*(arg1.y_ - arg2.y_));
     }
 }
 

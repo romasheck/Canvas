@@ -3,7 +3,7 @@
 
 #include "gui_lib.hpp"
 #include "coordinate.hpp"
-#include "Pixel.hpp"
+//#include "Pixel.hpp"
 #include "Events.hpp"
 //#include "View.hpp"
 #include "Context.hpp"
@@ -134,7 +134,7 @@ namespace gui
         virtual coordinate positionToLocation(coordinate position) const;
     };
 //==========================================================================
-    class WidgetMaster: public WidgetManager //Base for MainWidget and HAS NOT parent (nullptr)
+    class WidgetMaster: protected WidgetManager //Base for MainWidget and HAS NOT parent (nullptr)
     {
     private:
         coordinate scale_;
@@ -163,6 +163,7 @@ namespace gui
     public:
         void drawAll();
     };
+//==========================================================================
 }
 
 #endif

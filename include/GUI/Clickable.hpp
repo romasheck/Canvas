@@ -11,12 +11,11 @@ namespace gui
             coordinate clickLocation_;
 
         protected:
-            virtual void respond2Click()
-            {};
-            virtual bool clickMe()
-            {
-                return inMe(clickLocation_);
-            }
+            virtual void respond2Click() {};
+            //virtual void respond2Press() {};
+            //virtual void respond2Realese() {};
+
+            virtual bool clickMe();
             
         public:
             Clickable(WidgetManager* parent, coordinate size = {0.3, 0.3}, coordinate location = {0.f, 0.f}):
@@ -24,31 +23,7 @@ namespace gui
             {};
 
         public:
-            bool catchEvent(const sf::Event event) override
-            {
-                /*if (event.type == sf::Event::MouseButtonPressed)
-                {
-                    clickLocation_ = sf::Vector2f(event.mouseButton.x, event.mouseButton.y);
-                    if (clickMe() == true)
-                    {
-                        respond2Click();
-                        return true;
-                    }
-                }*/
-                return false;
-            }
-            bool catchClick (Click click) override
-            {
-                clickLocation_ = click.location_;
-
-                if (clickMe() == true)
-                {
-                    respond2Click();
-                    return true;
-                }
-
-                return false;
-            }
+            bool catchClick (Click click) override;
     };
 }
 

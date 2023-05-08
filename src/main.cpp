@@ -2,15 +2,14 @@
 
 #include "../include/gui.hpp"
 
-
 int main()
 {
     gui::CanvasMaster* canvas_master_ptr = gui::CanvasMasterCtor({1000, 1000});
-
+    PRINT_LINE
     canvas_master_ptr->createAll();
-    gui::Widget* test_widget_ptr = new gui::Widget(canvas_master_ptr, {0.5, 0.3}, {0.2, 0.3});
-    canvas_master_ptr->pushWidget(test_widget_ptr);
-    //test_widget_ptr->dumpMe("test");
+    //gui::Widget* test_widget_ptr = new gui::Widget(canvas_master_ptr, {0.5, 0.3}, {0.2, 0.3});
+    //canvas_master_ptr->pushWidget(test_widget_ptr);
+    
     canvas_master_ptr->drawAll();
 
     canvas_master_ptr->loop();

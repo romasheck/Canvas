@@ -1,5 +1,6 @@
 #pragma once
 #include "../../include/GUI/AssetManager.hpp"
+#include "../../include/GUI/Mouse.hpp"
 #include <memory>
 #include <SFML/Graphics/RenderWindow.hpp>
 
@@ -19,11 +20,15 @@ namespace gui {
 
         sf::RenderWindow& window(); 
 
-        
+        const Mouse& mouse() const;
+
+        sf::Time getTime() const;
 
     private:
         std::unique_ptr<sf::RenderWindow> window_ptr;
         std::unique_ptr<AssetManager> asset_manager_ptr;
+        std::unique_ptr<Mouse> mouse_ptr;
+        std::unique_ptr<sf::Clock> sf_clock_ptr;
     };
 
     extern Context* context_ptr;

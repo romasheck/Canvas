@@ -59,7 +59,7 @@ namespace gui
         sf::Sprite view_;
         view_.setPosition(getPosition());
         
-        sf::Texture bad_view = context_ptr->getTexture(TEXTURE_ID::DEFAULT);
+        sf::Texture bad_view = context_ptr->getTexture(TEXTURE_ID::Default);
         
         view_.setTexture(bad_view);
         view_.scale({getSizeInPixels().x_/(bad_view.getSize()).x, getSizeInPixels().y_/bad_view.getSize().y});
@@ -226,10 +226,15 @@ namespace gui
         context_ptr = new Context;
 
         context_ptr->window().create(sf::VideoMode(size.x, size.y), window_name);
+        context_ptr->window().setFramerateLimit(60);
         scale_ = coordinate((float)context_ptr->window().getSize().x, (float)context_ptr->window().getSize().y);
 
         context_ptr->addFont(FONT_ID::DEFAULT, "assets/fonts/Raleway-Black.ttf");
-        context_ptr->addTexture(TEXTURE_ID::DEFAULT, "assets/textures/maxresdefault.jpg");
+        context_ptr->addTexture(TEXTURE_ID::Default, "assets/textures/maxresdefault.jpg");
+        PRINT_LINE
+        context_ptr->sf_clock_ptr->restart();
+        PRINT_LINE
+        //push MouseMaster
     }
 
     WidgetMaster::~WidgetMaster()
@@ -257,9 +262,9 @@ namespace gui
 
     bool WidgetMaster::catchEvent(const sf::Event event) //still can catch only Click
     {
-        if (event.type == sf::Event::MouseButtonPressed)
+        if (context_ptr->mouse_ptr->isMyEvent(event))
         {
-            if (catchClick(Click(event)))
+            if (catchClick(Click(context_ptr->mouse_ptr->position)))
             {
                 return true;
             }
@@ -303,14 +308,10 @@ namespace gui
         {
             if (needReDraw)
             {
-                //std::cout<<"redrawing"<<std::endl;
-                //context_ptr->window().display();
                 context_ptr->window().clear();
                 drawAll();
-                //context_ptr->window().display();
-                //std::cout<<"redrawing end\n";
             }
-    
+
             while (context_ptr->window().pollEvent(event))
             {
                 if (event.type == sf::Event::Closed)
@@ -324,7 +325,6 @@ namespace gui
             }
             //std::cout<<"display\n";
             context_ptr->window().display();
-            sf::sleep(sf::milliseconds(10));//delay
         }
     }
 

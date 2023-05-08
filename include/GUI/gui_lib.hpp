@@ -9,6 +9,7 @@
 
 namespace gui
 {
+    #define PRINT_LINE printf ("I am on the line %d\n", __LINE__);
     /*
     One-window program need one window_ptr
     Useage off global var usefull, but danger there

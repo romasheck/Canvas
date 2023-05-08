@@ -2,6 +2,7 @@
 #define PANEL_HPP
 
 #include "CollorRegulator.hpp"
+#include "ModeButtons.hpp"
 
 namespace gui
 {
@@ -23,18 +24,15 @@ namespace gui
     public:
         void createAll()
         {
-            //location = loc_canv + sz_canv - sz_ColorReg.y_
-            createColorRegulator (sf::Color::Green, {0.7, 0.35}, \
-            {0.1, 0.55} );
-            //location = loc_canv + sz_canv - 2*sz_ColorReg.y_
-            createColorRegulator (sf::Color::Red, {0.7, 0.4}, \
-            {0.1, 0.1} );
+            auto bDot_ptr = new DotButton(canvas_, this, coordinate{0.5, 0.5}, coordinate{0.1, 0.1});
+            pushWidget ((Widget*)bDot_ptr);
         }
 
     public:
         void draw() override;
 
     private:
+        
         void createColorRegulator(sf::Color color, coordinate size, coordinate location);
     };
 }

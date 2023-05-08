@@ -8,11 +8,14 @@ namespace gui
 {   
     enum class TEXTURE_ID
     {
-        DEFAULT,
-        CLEANER, 
-        DOT_BUTTOM,
-        LINE_BUTTOM, 
-        CIRCLE_BUTTOM,
+        Default,
+        Cleaner, 
+        DotButton,
+        RulerButton, 
+        CircleSolutionButton,
+        CircleArbitaryButton,
+        PencilButton,
+        Paper
     };
 
     enum class FONT_ID

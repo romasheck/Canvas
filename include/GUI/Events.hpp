@@ -4,6 +4,8 @@
 #include "gui_lib.hpp"
 #include "coordinate.hpp"
 
+#include "../../include/GUI/Mouse.hpp"
+
 namespace gui
 {
     class Click

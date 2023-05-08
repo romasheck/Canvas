@@ -14,7 +14,10 @@ namespace gui
         createCanvas({0.7, 0.8}, {0.1, 0.1});
         createPanel({0.1, 0.8}, \
                     canvas_ptr_->location_ + canvas_ptr_->size_ - coordinate(0, 0.8));
-        createCleaner({0.1, 0.1}, {0.05, 0.85});
+        createCleaner({0.1, 0.1}, {0, 0.9});
+
+        auto test_SimpleView = new SimpleView(TEXTURE_ID::Cleaner, "assets/textures/cleaner.jpeg", this, coordinate(0.5, 0.5), coordinate(0.1, 0.1));
+        pushWidget(test_SimpleView);
     }
     
     void CanvasMaster::createCanvas(coordinate size, coordinate location)
