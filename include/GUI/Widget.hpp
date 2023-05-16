@@ -42,6 +42,7 @@ namespace gui
     {
     protected:
         WidgetManager * parent_;
+        static Context* context_ptr;
         //sf::Sprite view_;
         //sf::Text text;
         //View view_;
@@ -114,7 +115,7 @@ namespace gui
         }
 
     public:
-        //void draw() override;
+        void draw() override;
         //void close() override;
         virtual void reDrawSig();
 

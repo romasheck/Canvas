@@ -11,13 +11,9 @@ namespace gui
 
     void CanvasMaster::createAll()
     {
-        createCanvas({0.7, 0.8}, {0.1, 0.1});
-        createPanel({0.1, 0.8}, \
-                    canvas_ptr_->location_ + canvas_ptr_->size_ - coordinate(0, 0.8));
-        createCleaner({0.1, 0.1}, {0, 0.9});
-
-        auto test_SimpleView = new SimpleView(TEXTURE_ID::Cleaner, "assets/textures/cleaner.jpeg", this, coordinate(0.5, 0.5), coordinate(0.1, 0.1));
-        pushWidget(test_SimpleView);
+        createCanvas({0.7, 0.9}, {0.1, 0.05});
+        createPanel({0.1, 0.6}, {0.85, 0.35});
+        createCleaner({0.045, 0.045}, {0.005, 0.905});
     }
     
     void CanvasMaster::createCanvas(coordinate size, coordinate location)
@@ -28,10 +24,8 @@ namespace gui
 
     void CanvasMaster::createPanel(coordinate size, coordinate location)
     {
-        auto panel_ptr = new Panel(*canvas_ptr_, this, size, location);
+        auto panel_ptr = new InstrumentalPanel(*canvas_ptr_, this, size, location);
         pushWidget(panel_ptr);
-
-        panel_ptr->createAll();
     }
 
     void CanvasMaster::createCleaner(coordinate size, coordinate location)

@@ -113,7 +113,7 @@ namespace gui
         }
         }
     }
-    #undef BUTTON_STATE(MODE)
+    #undef BUTTON_STATE
 
     MouseButtonStates Mouse::getRight() const
     {

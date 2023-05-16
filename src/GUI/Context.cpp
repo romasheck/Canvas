@@ -44,5 +44,5 @@ namespace gui {
         return *mouse_ptr;
     }
 
-    Context* context_ptr;
+    //Context* context_ptr;
 } // namecpace game

@@ -6,6 +6,7 @@
 
 namespace gui
 {
+    /*
     class Panel: public CWidgetManager
     {
     private:
@@ -34,6 +35,15 @@ namespace gui
     private:
         
         void createColorRegulator(sf::Color color, coordinate size, coordinate location);
+    };*/
+    class Panel : public CWidgetManager, public SimpleView
+    {
+    public:
+        Panel(Canvas& canvas, WidgetManager* parent, coordinate size, coordinate location);
+
+    public:
+        void draw() override;
+
     };
 }
 

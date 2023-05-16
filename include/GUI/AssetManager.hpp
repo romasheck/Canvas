@@ -15,7 +15,8 @@ namespace gui
         CircleSolutionButton,
         CircleArbitaryButton,
         PencilButton,
-        Paper
+        Paper,
+        Panel
     };
 
     enum class FONT_ID

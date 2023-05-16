@@ -12,13 +12,22 @@ namespace gui
 
     void ModeButton::respond2Click()
     {
-        if (wasPressed == false)
+        if (context_ptr->mouse().getLeft() == MouseButtonStates::PRESSED)
         {
-            return;
+                
+            if (wasPressed == true)
+            {
+                return;
+            }
+            else{
+                wasPressed = true;
+                canvas_.penMode_ = type_;
+                //printf ("one of ModeButt was pressed\n");
+            }
         }
-        else{
-            wasPressed = true;
-            canvas_.penMode_ = type_;
+        if(context_ptr->mouse().getLeft() == MouseButtonStates::REALESED)
+        {
+            wasPressed = false;
         }
     }
 }

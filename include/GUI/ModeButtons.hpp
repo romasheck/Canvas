@@ -6,10 +6,10 @@
 namespace gui
 {
 #define MAKE_CLASS_DECLARATION(class_name)                              \
-    class class_name final: protected ModeButton, protected SimpleView  \
+    class class_name final: public ModeButton, protected SimpleView  \
     {                                                                   \
     public:                                                             \
-        class_name(Canvas&, WidgetManager*, coordinate, coordinate);    \
+        class_name(Canvas& canvas, WidgetManager* parent, coordinate size, coordinate location);    \
     };
     
     MAKE_CLASS_DECLARATION(DotButton)

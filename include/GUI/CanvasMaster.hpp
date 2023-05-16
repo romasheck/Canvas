@@ -8,8 +8,9 @@
 #include "Canvas.hpp"
 #include "CWidget.hpp"
 #include "CollorRegulator.hpp"
-#include "Panel.hpp"
+#include "InstrumentalPanel.hpp"
 #include "Cleaner.hpp"
+
 
 namespace gui
 {

@@ -3,6 +3,10 @@
 
 namespace gui
 {
+
+    Context* Widget::context_ptr;
+
+
 //======================================================
     bool WidBox::inMe (const coordinate position) const
     {
@@ -159,7 +163,7 @@ namespace gui
     bool WidgetManager::catchClick (Click click)
     {
         bool catched = false;
-
+        
         if (inMe(click.location_))
         {
             click.location_ = positionToLocation(click.location_);
@@ -213,6 +217,14 @@ namespace gui
     void WidgetManager::reDrawSig()
     {
         parent_->reDrawSig();
+    }
+
+    void WidgetManager::draw()
+    {
+        for(const auto& widgtet_ptr: widgets_)
+        {
+            widgtet_ptr->draw();
+        }
     }
 //======================================================
     WidgetMaster::WidgetMaster(sf::Vector2f size, const char* window_name):

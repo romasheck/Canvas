@@ -31,5 +31,5 @@ namespace gui {
         std::unique_ptr<sf::Clock> sf_clock_ptr;
     };
 
-    extern Context* context_ptr;
+    //extern Context* context_ptr;
 }

@@ -9,7 +9,7 @@ namespace gui
         penMode_(PenMode::Default)
         {
             background_.setPosition(getPosition());
-            context_ptr->addTexture(TEXTURE_ID::Paper, "assets/textures/white-texture.jpg");
+            Widget::context_ptr->addTexture(TEXTURE_ID::Paper, "assets/textures/white-texture.jpg");
             sf::Texture texture = context_ptr->getTexture(TEXTURE_ID::Paper);         
             background_.setTexture(texture);
             background_.scale({getSizeInPixels().x_/(texture.getSize()).x, getSizeInPixels().y_/texture.getSize().y});
@@ -44,7 +44,15 @@ namespace gui
         } 
         if (penMode_ & GEOMETRIC)
         {
-            //projector call
+            switch (penMode_)
+            {
+            case Dot:
+                //printf ("I must draw a dot\n");
+                break;
+            
+            default:
+                break;
+            }
         }  
         if (penMode_ & DEFAULT)
         {
@@ -62,7 +70,7 @@ namespace gui
     {
         background_.setTexture(context_ptr->getTexture(TEXTURE_ID::Paper));
         //return;
-        context_ptr->window().draw(background_);
+        Widget::context_ptr->window().draw(background_);
         //std::cout<<1<<std::endl;
         //printf ("canvas\n");
     }

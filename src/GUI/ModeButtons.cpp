@@ -10,7 +10,9 @@ namespace gui
         SimpleView(TEXTURE_ID:: class_name, path, parent, size, location)                                            \
         {};
 
-    MAKE_CLASS_DEFINITION(DotButton, Dot, "assets/textures/black-dot.jpg")
-    MAKE_CLASS_DEFINITION(RulerButton, Ruler, "assets/textures/line")
+    MAKE_CLASS_DEFINITION(DotButton, Dot, "assets/textures/Dot.png")
+    MAKE_CLASS_DEFINITION(RulerButton, Ruler, "assets/textures/Ruler.png")
+    MAKE_CLASS_DEFINITION(CircleArbitaryButton, CircleArbitary, "assets/textures/CircleArbitary.png")
+    MAKE_CLASS_DEFINITION(CircleSolutionButton, CircleSolution, "assets/textures/CircleSoution.png")
 
 }
