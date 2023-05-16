@@ -37,7 +37,9 @@ namespace geo
 
         Figure* figure_ptr = NULL;
 
-        for (int i = 0 ; i < std::size(figures_) ; i++)
+        int vec_size = std::size(figures_);
+
+        for (int i = 0 ; i < vec_size ; i++)
         {
             figure_ptr = figures_[i];
 
@@ -78,6 +80,40 @@ namespace geo
         }
 
         return IsctCunt;
+    }
+
+    Line* FigureManager::makeLine(Point p1, Point p2)
+    {
+        Line* new_line = new Line(p1, p2);
+        pushFigure((Figure*)new_line);
+
+        return new_line;
+    }
+
+    Circle* FigureManager::makeCircle(float rad, Point p)
+    {
+        Circle* new_circle = new Circle(rad, p);
+        pushFigure((Figure*)new_circle);
+
+        return new_circle;
+    }
+
+    Circle* FigureManager::makeCircle (Point cntr, Point p)            // Создание окружности по точке центра и точке на окружности
+    {
+        return makeCircle(distance(cntr, p), cntr);
+    }
+
+    Circle* FigureManager::makeCircle (Point cntr, Point p1, Point p2) // Создание окружности по точке центра и двум точкам, расстояние между которыми = радиус
+    {
+        return makeCircle(distance(p1, p2), cntr);
+    }
+
+    Dot* FigureManager::makeDot(Point p)
+    {
+        Dot* new_dot = new Dot(p);
+        pushFigure((Figure*)new_dot);
+
+        return new_dot;
     }
 
     void FigureManager::debugPrintFigures()

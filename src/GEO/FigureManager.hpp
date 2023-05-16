@@ -42,6 +42,16 @@ namespace geo
         int     IntersectWithAll(Figure* fig);
 
         void    debugPrintFigures();
+
+        Line*   makeLine(Point p1, Point p2);
+
+        Circle* makeCircle(float rad, Point p);
+
+        Circle* makeCircle(Point cntr, Point p);
+
+        Circle* makeCircle(Point cntr, Point p1, Point p2);
+
+        Dot*    makeDot(Point p);
     };
 
 

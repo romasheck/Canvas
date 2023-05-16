@@ -259,6 +259,11 @@ namespace geo
 
 //========================= Block ended =========================
 
+    float distance (Point p1, Point p2)
+    {
+        float dist = sqrtf((p1.x_-p2.x_) * (p1.x_-p2.x_) + (p1.y_-p2.y_) * (p1.y_-p2.y_) );
+    }
+
     void DebugTwoPoints (TwoPoints pts)
     {
         printf("Первая точка пересечения: (%f;%f)\nВторая точка пресечения:  (%f,%f)\nВсего точек:\t\t  %d\n", pts.p1_.x_, pts.p1_.y_, pts.p2_.x_, pts.p2_.y_, pts.nop_);

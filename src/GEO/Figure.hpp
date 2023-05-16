@@ -7,7 +7,7 @@
 
 namespace geo
 {
-    const int np = 666;
+    const int np = 333;
     const float EPSILON = 1e-5;
 
 //====================================
@@ -151,13 +151,15 @@ namespace geo
     
     TwoPoints DotLne (Figure* dotarg, Figure* lnearg);
 
-    extern TwoPoints (*findIsctDots[3][3])(Figure*, Figure*);
+    extern    TwoPoints (*findIsctDots[3][3])(Figure*, Figure*);
 
-    void DebugTwoPoints (TwoPoints pts);
+    void      DebugTwoPoints (TwoPoints pts);
     
 //========================= Block ended =========================
 
-    void DebugPrintFigure(Figure* fig);
+    float     distance(Point p1, Point p2);
+
+    void      DebugPrintFigure(Figure* fig);
 
 }
 #endif

@@ -1,0 +1,3 @@
+/home/askar/Workspase/Canvas/build/CMakeFiles/Canvas.dir
+/home/askar/Workspase/Canvas/build/CMakeFiles/edit_cache.dir
+/home/askar/Workspase/Canvas/build/CMakeFiles/rebuild_cache.dir
