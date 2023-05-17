@@ -32,6 +32,8 @@ namespace gui
         case CanvasPenMode::Dot:
         {
             printf ("dot mode\n");
+            if (nearest_fig_ptr != nullptr)
+                coord = geometry_.dotOnClosestFig(coord, nearest_fig_ptr);
 
             addDot(coord);
 
@@ -65,7 +67,7 @@ namespace gui
             }
             if (nearest_fig_ptr->type_ == geo::Figure::DOT)
             {
-                //doCircleArbitary((geo::Dot*)nearest_fig_ptr);
+                doCircleArbitary((geo::Dot*)nearest_fig_ptr);
             }
             else
             {
@@ -83,10 +85,13 @@ namespace gui
 
     void Projector::addDot(geo::Point p)
     {
-        auto dot_ptr = geometry_.makeDot(p);
+        if (validatePoint(p))
+        {
+            auto dot_ptr = geometry_.makeDot(p);
 
-        drawDot(*dot_ptr);
-        //PRINT_LINE
+            drawDot(*dot_ptr);
+            //PRINT_LINE
+        }        
     }
 
     void Projector::doRuler(const geo::Dot* fig)
@@ -110,6 +115,41 @@ namespace gui
             drawLine(*line);
 
             auto inter_num = geometry_.IntersectWithAll(line);
+
+            for (int i = 0; i < inter_num; i++)
+            {
+                auto fig_ptr = geometry_.getFigureFromEnd(i);
+
+                if (fig->type_ != geo::Figure::DOT)
+                {
+                    printf ("smth wrong with intersections\n");
+                }
+
+                drawDot(*(geo::Dot*)fig_ptr);
+            }
+        }
+    }
+
+    void Projector::doCircleArbitary(const geo::Dot* fig)
+    {
+        if (buff_.processing != CircleArbitary)
+        {
+            buff_.processing = CircleArbitary;
+            //PRINT_LINE
+            buff_.dot1_ptr = fig;
+            //PRINT_LINE
+            //drawDot(*nearest_fig_ptr);//noooooooooo!
+        }
+        else{
+            printf("second dot\n");
+            
+            buff_.processing = Default;
+
+            auto circle = geometry_.makeCircle(buff_.dot1_ptr->p_, fig->p_);
+
+            drawCircle(*circle);
+
+            auto inter_num = geometry_.IntersectWithAll(circle);
 
             for (int i = 0; i < inter_num; i++)
             {
@@ -215,4 +255,77 @@ namespace gui
 
         canvas_.context_ptr->window().draw(line_view);
     }
+
+    void Projector::drawCircle(geo::Circle circle)
+    {
+        auto cntr_ = canvas_.locToPos(transmitToCanv(circle.cntr_));
+
+
+
+        sf::VertexArray lines(sf::LinesStrip);
+        int numSteps = 100;
+        float angleStep = 2 * 3.14159f / numSteps;
+        
+        for (int i = 0; i <= numSteps; ++i)
+        {
+            float angle = angleStep * i;
+            float x = cntr_.x_ + circle.rad_ * cos(angle);
+            float y = cntr_.y_ + circle.rad_ * sin(angle);
+            lines.append(sf::Vertex(sf::Vector2f(x, y), sf::Color::Blue));
+        }
+
+        canvas_.context_ptr->window().draw(lines);
+        /*
+        auto pos = canvas_.getPosition();
+        auto sz = canvas_.getSizeInPixels();
+
+        sf::FloatRect canvasBox(pos, sz);
+
+        sf::CircleShape circle_view;
+
+        sf::View canvasBound;
+        canvasBound.reset(canvasBox);
+
+        circle_view.setRadius(circle.rad_);
+        circle_view.setPosition(canvas_.locToPos(transmitToCanv(circle.cntr_)) - coordinate(circle.rad_, circle.rad_));
+        circle_view.setOutlineColor(sf::Color::Red); // цвет контура окружности
+        circle_view.setOutlineThickness(2); // толщина контура окружности
+        circle_view.setPointCount(100 + circle.rad_);
+        circle_view.setFillColor(sf::Color::Transparent);
+
+        ((coordinate)canvasBound.getSize()).printMe("bound");
+
+        
+
+        canvas_.context_ptr->window().setView(canvasBound);
+        canvas_.context_ptr->window().draw(circle_view);
+        canvas_.context_ptr->window().setView(canvas_.context_ptr->window().getDefaultView());
+        */
+    }
+
+    void Projector::reDraw()
+    {
+        for (const auto fig_ptr: geometry_.figures_)
+        {
+            if (fig_ptr->type_ == geo::Figure::DOT)
+            {
+                drawDot(*((geo::Dot*)fig_ptr));
+            }
+            if (fig_ptr->type_ == geo::Figure::LINE)
+            {
+                drawLine(*((geo::Line*)fig_ptr));
+            }
+            if (fig_ptr->type_ == geo::Figure::CIRCLE)
+            {
+                drawCircle(*((geo::Circle*)fig_ptr));
+            }
+        }
+    }
+
+    void Projector::flush()
+    {
+        geometry_.flushFig();
+    }
+
+
 }

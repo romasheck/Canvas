@@ -39,6 +39,9 @@ namespace gui
         void createAll();
 
     private:
+        //void loop() 
+
+    private:
         void createCanvas(coordinate size, coordinate location);
         void createPanel(coordinate size, coordinate location);
         void createCleaner(coordinate size, coordinate location);

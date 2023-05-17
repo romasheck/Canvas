@@ -19,7 +19,8 @@ namespace gui
     void Cleaner::respond2Click()
     {
         //std::cout<<"click on clear bottom"<<std::endl;
-        parent_->reDrawSig();
+        canvas_.flush();
+        //parent_->reDrawSig();
     }
 
     void Cleaner::draw()

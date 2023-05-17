@@ -75,6 +75,8 @@ namespace gui
         Widget::context_ptr->window().draw(background_);
         //std::cout<<1<<std::endl;
         //printf ("canvas\n");
+
+        projector_.reDraw();
     }
 
     coordinate Canvas::locloc (const coordinate location) const
@@ -98,5 +100,13 @@ namespace gui
     coordinate Canvas::locToPos(const coordinate loc) const
     {
         return locationToPosition(colcol(loc));
+    }
+
+    void Canvas::flush()
+    {
+        //draw();
+        projector_.flush();
+
+        parent_->reDrawSig();
     }
 }

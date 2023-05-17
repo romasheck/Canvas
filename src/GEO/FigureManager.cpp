@@ -96,6 +96,71 @@ namespace geo
         return IsctCunt;
     }
 
+    Point FigureManager::dotOnClosestFig(Point p, Figure* fig)
+    {
+        switch(fig->type_)
+        {
+            case Figure::DOT:{break;}
+            case Figure::CIRCLE:
+            {
+                Circle cir = *(Circle*) fig;
+
+                float dx = p.x_ - cir.cntr_.x_;
+                float dy = p.y_ - cir.cntr_.y_;
+
+                // Находим расстояние от центра окружности до данной точки
+                float distance = std::sqrt(dx * dx + dy * dy);
+
+                // Нормализуем вектор, чтобы получить единичный вектор направления
+                float unitX = dx / distance;
+                float unitY = dy / distance;
+
+                // Находим координаты ближайшей точки на окружности
+                float closestX = cir.cntr_.x_ + unitX * cir.rad_;
+                float closestY = cir.cntr_.y_ + unitY * cir.rad_;
+
+                // Возвращаем ближайшую точку
+                Point closestPoint(0, 0);
+                closestPoint.x_ = closestX;
+                closestPoint.y_ = closestY;
+
+                return closestPoint;
+            }
+            case Figure::LINE:
+            {
+                Line lne = *(Line*) fig;
+                Point closestPoint(0, 0);
+                float A = lne.A_, B = lne.B_, C = lne.C_;
+                float denominator = A * A + B * B;
+
+                // Если прямая вертикальная (A = 0)
+                if (std::fabs(A) < 1e-6f)
+                {
+                    closestPoint.x_ = -C / B;
+                    closestPoint.y_ = p.y_;
+                }
+                // Если прямая горизонтальная (B = 0)
+                else if (std::fabs(B) < 1e-6f)
+                {
+                    closestPoint.x_ = p.x_;
+                    closestPoint.y_ = -C / A;
+                }
+                // В остальных случаях
+                else
+                {
+                    closestPoint.x_ = (B * (B * p.x_ - A * p.y_) - A * C) / denominator;
+                    closestPoint.y_ = (A * (-B * p.x_ + A * p.y_) - B * C) / denominator;
+                }
+
+                return closestPoint;
+            }
+            default:
+            {
+                assert(0 && "Incorrect fig type in func dotOnClosestFig\n");
+            }
+        }
+    }
+
     Line* FigureManager::makeLine(Point p1, Point p2)
     {
         Line* new_line = new Line(p1, p2);
@@ -128,6 +193,12 @@ namespace geo
         pushFigure((Figure*)new_dot);
 
         return new_dot;
+    }
+
+    void FigureManager::flushFig()
+    {
+        while(figures_.size())
+            popFigure();
     }
 
     void FigureManager::debugPrintFigures()

@@ -64,6 +64,10 @@ namespace gui
     private:
         bool validatePoint (const geo::Point p) const;
 
+    public:
+        void flush();
+        void reDraw();
+
     private:
         Canvas& canvas_;
         coordinate canvasScale_;
@@ -77,7 +81,7 @@ namespace gui
             const geo::Dot* dot1_ptr;
             const geo::Dot* dot2_ptr;
         }Buffer;
-        Buffer buff_;   
+        Buffer buff_; 
     };
 
     class Canvas final : public Clickable
@@ -115,6 +119,10 @@ namespace gui
 
         coordinate colcol(const coordinate loc) const;
         coordinate locToPos(const coordinate loc) const;
+
+    public:
+        void reDraw();
+        void flush();
 
     public:
         void draw() override;

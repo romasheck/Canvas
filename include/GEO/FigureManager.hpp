@@ -44,6 +44,8 @@ namespace geo
         /// @return Колличество точек пересечения
         int     IntersectWithAll(Figure* fig);
 
+        Point   dotOnClosestFig(Point p, Figure* fig);
+
         void    debugPrintFigures();
 
         Line*   makeLine(Point p1, Point p2);
@@ -55,6 +57,8 @@ namespace geo
         Circle* makeCircle(Point cntr, Point p1, Point p2);
 
         Dot*    makeDot(Point p);
+
+        void    flushFig();
     };
 
 
