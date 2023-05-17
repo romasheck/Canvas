@@ -17,7 +17,7 @@ namespace gui
 
     bool Projector::processPen(const PenMode mode, const coordinate loc)
     {
-        if (!(mode and CanvasModeGroups::GEOMETRIC))
+        if (!(mode & CanvasModeGroups::GEOMETRIC))
         {
             printf ("this action in developing\n");
             return false;
@@ -56,6 +56,24 @@ namespace gui
             
             break;
         }
+        case CanvasPenMode::CircleArbitary:
+        {
+            if (nearest_fig_ptr == nullptr)
+            {
+                printf ("circle?\n");
+                break;
+            }
+            if (nearest_fig_ptr->type_ == geo::Figure::DOT)
+            {
+                //doCircleArbitary((geo::Dot*)nearest_fig_ptr);
+            }
+            else
+            {
+                printf ("incorrect CircleArbitary using\n");
+            }
+
+            break;
+        }
         default:
             break;
         }
@@ -92,8 +110,7 @@ namespace gui
             drawLine(*line);
 
             auto inter_num = geometry_.IntersectWithAll(line);
-PRINT_LINE
-printf ("cunt_int + %d\n", inter_num);
+
             for (int i = 0; i < inter_num; i++)
             {
                 auto fig_ptr = geometry_.getFigureFromEnd(i);
@@ -105,7 +122,6 @@ printf ("cunt_int + %d\n", inter_num);
 
                 drawDot(*(geo::Dot*)fig_ptr);
             }
-PRINT_LINE
         }
     }
 
@@ -146,6 +162,8 @@ PRINT_LINE
                 return true;
             }
         }
+
+        return false;
     }
 
     void Projector::drawLine(geo::Line line)

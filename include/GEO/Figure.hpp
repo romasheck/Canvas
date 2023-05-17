@@ -3,7 +3,7 @@
 
 #include "geo_lib.hpp"
 
-#define smn printf("Called %s\n", __func__);
+#define smn //printf("Called %s\n", __func__);
 
 namespace geo
 {
@@ -25,6 +25,8 @@ namespace geo
 
         public:
             bool operator >= (const float) const;
+
+            bool operator == (const Point) const;
     };
 //====================================
     class Figure

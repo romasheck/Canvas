@@ -10,9 +10,9 @@ namespace geo
             return nullptr;
         }
 
-        auto iter = figures_.end() - i;
+        auto iter = figures_.size() - i - 1;
 
-        return (*iter);
+        return figures_[iter];
     }
 
     Figure* FigureManager::whichFig(Point point)
@@ -63,11 +63,6 @@ namespace geo
 
             retval = findIsctDots[fig->type_][figure_ptr->type_](fig, figure_ptr);
 
-            for (auto f_ptr: figures_)
-            {
-                
-            }
-
             switch(retval.nop_)
             {
                 case 0:
@@ -77,7 +72,6 @@ namespace geo
                 case 1:
                 {
                     Dot* new_dot_ptr = new Dot(retval.p1_); 
-                    printf("Tochka est'\n");
                     pushFigure((Figure*)new_dot_ptr);
 
                     IsctCunt += 1;

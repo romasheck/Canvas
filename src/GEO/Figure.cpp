@@ -15,6 +15,19 @@ namespace geo
 
         return false;
     }
+
+    bool Point::operator== (const Point p) const
+    {
+        if (x_ == p.x_)
+        {
+            if (y_ == p.y_)
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
 //========================= Block of intersection bool funcs =========================
 
     TwoPoints (*findIsctDots[3][3])(Figure*, Figure*) = 
