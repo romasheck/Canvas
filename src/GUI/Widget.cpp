@@ -73,7 +73,7 @@ namespace gui
         //TEXT
         sf::Font font = context_ptr->getFont(FONT_ID::DEFAULT);
         sf::Text error_msg("Ha-ha!", font);
-        error_msg.setColor(sf::Color::Yellow);
+        error_msg.setFillColor(sf::Color::Yellow);
         
         coordinate text_lbAngle = coordinate(0.1f, 0.1f)*size_ + location_; 
         coordinate text_LocalSize = coordinate(0.5, 0.5) * size_;

@@ -119,6 +119,10 @@ namespace gui
             event.type == event.KeyPressed)
         {
             projector_.ctrlZ();
+        
+            return true;
         }
+
+        return false;
     }
 }

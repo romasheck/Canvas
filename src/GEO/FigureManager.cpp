@@ -159,6 +159,8 @@ namespace geo
                 assert(0 && "Incorrect fig type in func dotOnClosestFig\n");
             }
         }
+
+        return p;
     }
 
     Line* FigureManager::makeLine(Point p1, Point p2)

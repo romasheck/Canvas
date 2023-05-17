@@ -288,6 +288,8 @@ namespace geo
     float distance (Point p1, Point p2)
     {
         float dist = sqrtf((p1.x_-p2.x_) * (p1.x_-p2.x_) + (p1.y_-p2.y_) * (p1.y_-p2.y_) );
+
+        return dist;
     }
 
     void DebugTwoPoints (TwoPoints pts)
