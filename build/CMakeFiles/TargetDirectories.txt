@@ -1,3 +1,0 @@
-/home/princep/PROGS/OOP/canvas/build/CMakeFiles/Canvas.dir
-/home/princep/PROGS/OOP/canvas/build/CMakeFiles/edit_cache.dir
-/home/princep/PROGS/OOP/canvas/build/CMakeFiles/rebuild_cache.dir
