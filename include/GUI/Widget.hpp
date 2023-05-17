@@ -46,6 +46,7 @@ namespace gui
         //sf::Sprite view_;
         //sf::Text text;
         //View view_;
+        static Widget* last_active_;
 
     public:
         Widget(WidgetManager* parent, coordinate size = {0.3, 0.3}, coordinate location = {0.f, 0.f}):
@@ -95,6 +96,10 @@ namespace gui
 
     public:
         void dumpMe (const char* name) const;
+
+    protected:
+        void updateActive();
+        virtual void loseActive();
     };
 //==========================================================================
     class WidgetManager: virtual public Widget //Widget which contain several other

@@ -9,7 +9,7 @@ namespace gui
             {
                 //view_.setFillColor(sf::Color::Cyan);
                 view_.setPosition(getPosition());
-                context_ptr->addTexture(TEXTURE_ID::Cleaner, "assets/textures/cleaner.jpeg");
+                context_ptr->addTexture(TEXTURE_ID::Cleaner, "../assets/textures/cleaner.jpeg");
                 sf::Texture texture = context_ptr->getTexture(TEXTURE_ID::Cleaner);         
                 view_.setTexture(texture);
                 view_.scale({getSizeInPixels().x_/(texture.getSize()).x, getSizeInPixels().y_/texture.getSize().y});

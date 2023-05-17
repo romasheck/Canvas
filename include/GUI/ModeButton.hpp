@@ -7,11 +7,10 @@ namespace gui
     class ModeButton: public CWidget, public Clickable
     {
     private:
-        const Canvas::PenMode type_;
-        bool wasPressed;
+        const CanvasPenMode type_;
 
     public:
-        ModeButton(Canvas::PenMode type, Canvas& canvas, WidgetManager* parent, coordinate size, coordinate location);
+        ModeButton(CanvasPenMode type, Canvas& canvas, WidgetManager* parent, coordinate size, coordinate location);
 
     protected:
         void respond2Click() override;

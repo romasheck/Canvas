@@ -5,7 +5,7 @@
 
 namespace geo
 {
-    const float PointRad = 0.3;
+    const float PointRad = 10;
 
     class FigureManager
     {
@@ -34,6 +34,9 @@ namespace geo
         }
 
     public:
+        Figure* getFigureFromEnd(const uint32_t) const;
+
+    public:
         Figure* whichFig(Point);
 
         /// @brief  Находит точки пересечения данной фигуры с остальными и добавляет их в вектор фигур
@@ -42,6 +45,16 @@ namespace geo
         int     IntersectWithAll(Figure* fig);
 
         void    debugPrintFigures();
+
+        Line*   makeLine(Point p1, Point p2);
+
+        Circle* makeCircle(float rad, Point p);
+
+        Circle* makeCircle(Point cntr, Point p);
+
+        Circle* makeCircle(Point cntr, Point p1, Point p2);
+
+        Dot*    makeDot(Point p);
     };
 
 

@@ -5,7 +5,7 @@ namespace gui
 {
 
     Context* Widget::context_ptr;
-
+    Widget* Widget::last_active_;
 
 //======================================================
     bool WidBox::inMe (const coordinate position) const
@@ -139,6 +139,21 @@ namespace gui
         locationToPosition(location_).printMe("lbAngle");
         locationToPosition(rtAngle()).printMe("rtAngle");   
     }
+
+    void Widget::updateActive()
+    {
+        if (this != last_active_)
+        {
+            last_active_->loseActive();
+            last_active_ = this;
+        }
+        return;
+    }
+
+    void Widget::loseActive()
+    {
+        ;
+    }
 //======================================================
     bool WidgetManager::catchEvent(const sf::Event event) // still useless shit
     {
@@ -241,12 +256,14 @@ namespace gui
         context_ptr->window().setFramerateLimit(60);
         scale_ = coordinate((float)context_ptr->window().getSize().x, (float)context_ptr->window().getSize().y);
 
-        context_ptr->addFont(FONT_ID::DEFAULT, "assets/fonts/Raleway-Black.ttf");
-        context_ptr->addTexture(TEXTURE_ID::Default, "assets/textures/maxresdefault.jpg");
+        context_ptr->addFont(FONT_ID::DEFAULT, "../assets/fonts/Raleway-Black.ttf");
+        context_ptr->addTexture(TEXTURE_ID::Default, "../assets/textures/maxresdefault.jpg");
         PRINT_LINE
         context_ptr->sf_clock_ptr->restart();
         PRINT_LINE
         //push MouseMaster
+
+        last_active_ = this;
     }
 
     WidgetMaster::~WidgetMaster()

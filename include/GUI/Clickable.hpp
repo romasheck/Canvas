@@ -9,6 +9,7 @@ namespace gui
     {
         protected:
             coordinate clickLocation_;
+            bool wasPressed;
 
         protected:
             virtual void respond2Click() {};
@@ -19,11 +20,18 @@ namespace gui
             
         public:
             Clickable(WidgetManager* parent, coordinate size = {0.3, 0.3}, coordinate location = {0.f, 0.f}):
-            Widget(parent, size, location)
+            Widget(parent, size, location),
+            wasPressed(false)
             {};
 
         public:
             bool catchClick (Click click) override;
+
+        protected:
+            void loseActive () override;
+
+        protected:
+            bool simpleLeftClick();
     };
 }
 

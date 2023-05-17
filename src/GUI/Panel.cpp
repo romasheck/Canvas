@@ -21,7 +21,7 @@ namespace gui
 */
     Panel::Panel(Canvas& canvas, WidgetManager* parent, coordinate size = {0.3, 0.3}, coordinate location = {0.f, 0.f}):
         CWidgetManager(canvas, parent, size, location),
-        SimpleView(TEXTURE_ID::Panel, "assets/textures/magenta_rectangle.jpg", parent, size, location),
+        SimpleView(TEXTURE_ID::Panel, "../assets/textures/magenta_rectangle.jpg", parent, size, location),
         Widget(parent, size, location)
         {};
 
