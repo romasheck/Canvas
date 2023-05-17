@@ -19,6 +19,12 @@ namespace geo
         public:
             Point(float x, float y)
                 {x_ = x; y_ = y;}
+
+        public:
+            Point() {};
+
+        public:
+            bool operator >= (const float) const;
     };
 //====================================
     class Figure
@@ -87,9 +93,15 @@ namespace geo
                     C_ = C;
                 }
 
-        public:
-            Dot getDot1() const;
-            Dot getDot2() const;
+        /*public:
+            Point getDot1() const //Roma
+            {
+                return Point(-C_/A_, 0);
+            }
+            Point getDot2() const //Roma
+            {
+                return Point(0, -C_/B_);
+            }*/
     };
 //====================================
     class Dot : public Figure

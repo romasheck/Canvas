@@ -5,7 +5,7 @@
 
 namespace geo
 {
-    const float PointRad = 10;
+    const float PointRad = 30;
 
     class FigureManager
     {
@@ -34,7 +34,7 @@ namespace geo
         }
 
     public:
-        Figure* getFigureFromEnd(const uint32_t) const;
+        Figure* getFigureFromEnd(const uint32_t) const; //Roma
 
     public:
         Figure* whichFig(Point);

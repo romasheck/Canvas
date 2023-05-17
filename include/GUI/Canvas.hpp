@@ -62,9 +62,13 @@ namespace gui
         void drawLine (geo::Line line);
 
     private:
+        bool validatePoint (const geo::Point p) const;
+
+    private:
         Canvas& canvas_;
         coordinate canvasScale_;
         geo::FigureManager geometry_;
+        geo::Point RT;
     
     private:
         typedef struct{
