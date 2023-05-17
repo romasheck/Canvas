@@ -125,6 +125,9 @@ namespace gui
         void flush();
 
     public:
+        bool catchEvent(const sf::Event event) override;
+
+    public:
         void draw() override;
     };
 //==========================================================================

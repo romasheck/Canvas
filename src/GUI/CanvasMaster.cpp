@@ -12,7 +12,7 @@ namespace gui
     void CanvasMaster::createAll()
     {
         createCanvas({1.0, 1.0}, {0, 0});
-        createPanel({0.07, 0.6}, {0.85, 0.35});
+        createPanel({0.07, 0.6}, {0.91, 0.3});
         createCleaner({0.045, 0.045}, {0.005, 0.905});
     }
     

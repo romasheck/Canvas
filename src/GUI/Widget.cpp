@@ -258,9 +258,9 @@ namespace gui
 
         context_ptr->addFont(FONT_ID::DEFAULT, "../assets/fonts/Raleway-Black.ttf");
         context_ptr->addTexture(TEXTURE_ID::Default, "../assets/textures/maxresdefault.jpg");
-        PRINT_LINE
+        //PRINT_LINE
         context_ptr->sf_clock_ptr->restart();
-        PRINT_LINE
+        //PRINT_LINE
         //push MouseMaster
 
         last_active_ = this;
@@ -296,6 +296,23 @@ namespace gui
             if (catchClick(Click(context_ptr->mouse_ptr->position)))
             {
                 return true;
+            }
+        }
+        else
+        {
+            for (auto it = widgets_.rbegin(); it != widgets_.rend(); ++it)
+            {
+                bool catched = false;
+
+                catched = (*it)->catchEvent(event);
+                if (catched == false)
+                {
+                    continue;
+                }
+                else
+                {
+                    break;
+                }
             }
         }
         return false;
@@ -352,6 +369,8 @@ namespace gui
                     catchEvent(event);
                 }
             }
+
+            drawAll();
             //std::cout<<"display\n";
             context_ptr->window().display();
         }

@@ -31,7 +31,7 @@ namespace gui
         {
         case CanvasPenMode::Dot:
         {
-            printf ("dot mode\n");
+            //printf ("dot mode\n");
             if (nearest_fig_ptr != nullptr)
                 coord = geometry_.dotOnClosestFig(coord, nearest_fig_ptr);
 
@@ -76,6 +76,24 @@ namespace gui
 
             break;
         }
+        case CanvasPenMode::CircleSolution:
+        {
+            if (nearest_fig_ptr == nullptr)
+            {
+                printf ("circle?\n");
+                break;
+            }
+            if (nearest_fig_ptr->type_ == geo::Figure::DOT)
+            {
+                doCircleSolution((geo::Dot*)nearest_fig_ptr);
+            }
+            else
+            {
+                printf ("incorrect CircleArbitary using\n");
+            }
+
+            break;
+        }
         default:
             break;
         }
@@ -106,7 +124,13 @@ namespace gui
             //drawDot(*nearest_fig_ptr);//noooooooooo!
         }
         else{
-            printf("second dot\n");
+            //printf("second dot\n");
+            if (buff_.dot1_ptr->p_ == fig->p_)
+            {
+                printf ("choose different dots\n");
+
+                return;
+            }
             
             buff_.processing = Default;
 
@@ -145,6 +169,13 @@ namespace gui
             
             buff_.processing = Default;
 
+            if (buff_.dot1_ptr->p_ == fig->p_)
+            {
+                printf ("choose different dots\n");
+
+                return;
+            }
+
             auto circle = geometry_.makeCircle(buff_.dot1_ptr->p_, fig->p_);
 
             drawCircle(*circle);
@@ -165,6 +196,62 @@ namespace gui
         }
     }
 
+    void Projector::doCircleSolution(const geo::Dot* fig)
+    {
+        if (buff_.processing != CircleArbitary)
+        {
+            buff_.processing = CircleArbitary;
+            //PRINT_LINE
+            buff_.dot1_ptr = fig;
+            //PRINT_LINE
+            //drawDot(*nearest_fig_ptr);//noooooooooo!
+        }
+        else
+        {
+            if (!buff_.is2step)
+            {
+                if (buff_.dot1_ptr->p_ == fig->p_)
+                {
+                    buff_.processing = Default;
+
+                    printf ("choose different dots\n");
+
+                    return;
+                }
+
+                buff_.dot2_ptr = fig;
+
+                buff_.is2step = true;
+            }
+            else
+            {
+                //float rad = geo::distance(buff_.dot1_ptr->p_, buff_.dot2_ptr->p_);
+
+                buff_.processing = Default;
+
+                auto circle = geometry_.makeCircle(fig->p_, buff_.dot1_ptr->p_, buff_.dot2_ptr->p_);
+
+                drawCircle(*circle);
+
+                auto inter_num = geometry_.IntersectWithAll(circle);
+
+                for (int i = 0; i < inter_num; i++)
+                {
+                    auto fig_ptr = geometry_.getFigureFromEnd(i);
+
+                    if (fig->type_ != geo::Figure::DOT)
+                    {
+                        printf ("smth wrong with intersections\n");
+                    }
+
+                    drawDot(*(geo::Dot*)fig_ptr);
+                }
+
+                buff_.is2step = false;
+            }
+        }
+    }
+
     geo::Point Projector::transmitToMyCS (const coordinate loc) const
     {
         auto point = loc*canvasScale_; 
@@ -180,7 +267,7 @@ namespace gui
     {
         sf::CircleShape dot_view;
 
-        const float radius = 20;
+        const float radius = 10;
 
         dot_view.setRadius(radius);
         dot_view.setFillColor(sf::Color::Blue);
@@ -327,5 +414,15 @@ namespace gui
         geometry_.flushFig();
     }
 
+    bool Projector::ctrlZ()
+    {
+        //printf("size = %d\n", geometry_.figures_.size());
+        if (!geometry_.figures_.empty())
+            geometry_.figures_.pop_back();
 
+        //printf("size = %d\n", geometry_.figures_.size());
+        canvas_.parent_->reDrawSig();
+
+        return false;
+    }
 }

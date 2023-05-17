@@ -32,6 +32,7 @@ namespace gui
         {
             if (!(penMode_ & ARTISTIC))
             {
+                //printf ("uuuuu!\n");
                 projector_.processPen(penMode_, locloc(clickLocation_));
             }
             else
@@ -108,5 +109,16 @@ namespace gui
         projector_.flush();
 
         parent_->reDrawSig();
+    }
+
+    bool Canvas::catchEvent(const sf::Event event)
+    {
+        //event.KeyReleased
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) &&
+            sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) &&
+            event.type == event.KeyPressed)
+        {
+            projector_.ctrlZ();
+        }
     }
 }

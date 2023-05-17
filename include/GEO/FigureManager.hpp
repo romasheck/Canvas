@@ -5,7 +5,7 @@
 
 namespace geo
 {
-    const float PointRad = 30;
+    const float PointRad = 10;
 
     class FigureManager
     {
