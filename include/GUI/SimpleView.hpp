@@ -8,7 +8,7 @@ namespace gui
 {
     class SimpleView : virtual public Widget
     {
-    private:
+    protected:
         sf::Sprite view_;
         TEXTURE_ID id_;
 

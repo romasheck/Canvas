@@ -8,7 +8,19 @@ namespace gui
         Widget(parent, size, location),                                                                 \
         ModeButton(CanvasPenMode:: type, canvas, parent, size, location),                                               \
         SimpleView(TEXTURE_ID:: class_name, path, parent, size, location)                                            \
-        {};
+        {};                                                                                             \
+    void class_name::draw ()                            \
+    {                                                   \
+        SimpleView::draw();                             \
+        if (wasPressed)                                 \
+        {                                               \
+            sf::RectangleShape shadow;                  \
+            shadow.setPosition((getPosition()));        \
+            shadow.setSize(getSizeInPixels());\
+            shadow.setFillColor(sf::Color(0, 0, 0, 150));\
+            context_ptr->window().draw(shadow);\
+        }                            \
+    }
 
     MAKE_CLASS_DEFINITION(DotButton, Dot, "../assets/textures/Dot.png")
     MAKE_CLASS_DEFINITION(RulerButton, Ruler, "../assets/textures/Ruler.png")

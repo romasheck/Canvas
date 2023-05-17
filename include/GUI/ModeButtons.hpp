@@ -10,6 +10,8 @@ namespace gui
     {                                                                   \
     public:                                                             \
         class_name(Canvas& canvas, WidgetManager* parent, coordinate size, coordinate location);    \
+\
+        void draw () override;\
     };
     
     MAKE_CLASS_DECLARATION(DotButton)
